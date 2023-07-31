@@ -1,11 +1,15 @@
-// TODO: setup color
 export const COLOR = {
-  BLACK: '#1A1A1A',
-  WHITE: '#FFFFFF',
+  BLACK: '#191f28',
+  WHITE: '#ffffff',
+  RED: '#ff6b6b',
+  GREEN: '#94f5b8',
+  DARK_GREEN: '#40cf9c',
 
-  GRAY5: '#262A2F',
-  GRAY4: '#424851',
-  GRAY3: '#6D7684',
-  GRAY2: '#ADB3BE',
-  GRAY1: '#E5E7EC',
+  GRAY7: '#333d4b',
+  GRAY6: '#515a68',
+  GRAY5: '#6d7684',
+  GRAY4: '#adb3be',
+  GRAY3: '#e5e7ec',
+  GRAY2: '#f4f5f6',
+  GRAY1: '#fafafa',
 };

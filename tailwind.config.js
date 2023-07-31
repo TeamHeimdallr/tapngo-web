@@ -1,8 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin');
 
-// TODO: 개발하면서 spacing 추가
-const spacing = [...[...Array(1001).keys()]];
+const spacing = [...[...Array(1501).keys()]];
 
 const convertSpacing = spacing =>
   [...new Set(spacing)].reduce((res, space) => {
@@ -19,7 +18,6 @@ module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
   theme: {
-    // TODO: 반응형 break point에 맞게 설정. sm은 항상 0
     screens: {
       sm: '0px',
       md: '848px',
@@ -30,15 +28,19 @@ module.exports = {
       colors: {
         ...defaultTheme.colors,
 
-        // TODO: color setting
-        black: '#1a1a1a',
+        black: '#191f28',
         white: '#ffffff',
+        red: '#ff6b6b',
+        green: '#94f5b8',
+        darkGreen: '#40cf9c',
 
-        gray5: '#262a2f',
-        gray4: '#424851',
-        gray3: '#6d7684',
-        gray2: '#adb3be',
-        gray1: '#e5e7ec',
+        gray7: '#333d4b',
+        gray6: '#515a68',
+        gray5: '#6d7684',
+        gray4: '#adb3be',
+        gray3: '#e5e7ec',
+        gray2: '#f4f5f6',
+        gray1: '#fafafa',
       },
 
       fontFamily: {
@@ -117,6 +119,15 @@ module.exports = {
     plugin(function ({ addBase, addComponents, addUtilities, theme }) {
       addBase({});
       addComponents({
+        '.border-show': {
+          border: '1px solid red',
+        },
+        '.transition-card': {
+          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+        },
+        '.shadow-card': {
+          boxShadow: '0px 4px 16px 0px rgba(0, 0, 0, 0.05)',
+        },
         '.flex-center': {
           display: 'flex',
           alignItems: 'center',
@@ -150,17 +161,17 @@ module.exports = {
           transitionDuration: '150ms',
         },
 
-        // TODO: font setting
         '.font-r-12': { fontSize: '12px', lineHeight: '20px', fontWeight: 400 },
         '.font-r-14': { fontSize: '14px', lineHeight: '22px', fontWeight: 400 },
         '.font-r-16': { fontSize: '16px', lineHeight: '24px', fontWeight: 400 },
-        '.font-r-24': { fontSize: '24px', lineHeight: '32px', fontWeight: 400 },
-        '.font-r-28': { fontSize: '28px', lineHeight: '38px', fontWeight: 400 },
+        '.font-r-18': { fontSize: '18px', lineHeight: '26px', fontWeight: 400 },
 
         '.font-sb-12': { fontSize: '12px', lineHeight: '20px', fontWeight: 600 },
         '.font-sb-14': { fontSize: '14px', lineHeight: '22px', fontWeight: 600 },
+        '.font-sb-16': { fontSize: '16px', lineHeight: '24px', fontWeight: 600 },
         '.font-sb-18': { fontSize: '18px', lineHeight: '26px', fontWeight: 600 },
         '.font-sb-20': { fontSize: '20px', lineHeight: '28px', fontWeight: 600 },
+        '.font-sb-24': { fontSize: '24px', lineHeight: '32px', fontWeight: 600 },
         '.font-sb-28': { fontSize: '28px', lineHeight: '38px', fontWeight: 600 },
       });
 
