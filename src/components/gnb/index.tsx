@@ -1,9 +1,13 @@
-import { css, styled } from 'twin.macro';
+import tw, { css, styled } from 'twin.macro';
+
+import { IconBack } from '../icons';
 
 export const Gnb = () => {
   return (
     <Wrapper>
-      <div></div>
+      <IconWrapper>
+        <IconBack />
+      </IconWrapper>
     </Wrapper>
   );
 };
@@ -12,13 +16,12 @@ const Wrapper = styled.div(() => [
     position: fixed;
     top: 0px;
     left: 0px;
-    width: 1440px;
-    height: 100px;
+    height: 54;
     display: flex;
-    padding: 0px 24px;
-    justify-content: space-between;
+    padding: 15px 16px;
     align-items: center;
-    flex-shrink: 0;
     z-index: 20;
   `,
 ]);
+
+const IconWrapper = styled.div(() => [tw`clickable`]);
