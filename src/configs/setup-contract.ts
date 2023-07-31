@@ -1,7 +1,9 @@
-import { Chain } from '@wagmi/core';
-import { createPublicClient, createWalletClient, custom, http } from 'viem';
+import { createPublicClient, createWalletClient, http } from 'viem';
+import { Chain } from 'viem/chains';
 
-export const mumbai: Chain = {
+import { PROVIDER_HTTP_ENDPOINT } from '~/constants';
+
+export const polygonMumbai: Chain = {
   id: 80001,
   name: 'Mumbai',
   network: 'mumbai',
@@ -12,10 +14,10 @@ export const mumbai: Chain = {
   },
   rpcUrls: {
     public: {
-      http: ['https://polygon-mumbai-bor.publicnode.com'],
+      http: [PROVIDER_HTTP_ENDPOINT],
     },
     default: {
-      http: ['https://polygon-mumbai-bor.publicnode.com'],
+      http: [PROVIDER_HTTP_ENDPOINT],
     },
   },
   blockExplorers: {
@@ -28,13 +30,12 @@ export const mumbai: Chain = {
 };
 
 const publicClient = createPublicClient({
-  chain: mumbai,
+  chain: polygonMumbai,
   transport: http(),
 });
 
 const walletClient = createWalletClient({
-  chain: mumbai,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  chain: polygonMumbai,
   transport: http(),
 });
 

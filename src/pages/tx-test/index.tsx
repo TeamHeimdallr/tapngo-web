@@ -1,82 +1,51 @@
-import { useEffect } from 'react';
 import tw from 'twin.macro';
-import {
-  formatEther,
-  parseEther,
-  parseGwei,
-  parseTransaction,
-  serializeTransaction,
-  Signature,
-  TransactionSerializableEIP1559,
-} from 'viem';
+import { parseEther, parseGwei } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+import { polygonMumbai } from 'viem/chains';
 
-import { mumbai, publicClient, walletClient } from '~/configs/setup-contract';
+import { ButtonFilled } from '~/components/buttons';
+import { publicClient, walletClient } from '~/configs/setup-contract';
 import { TESTER_PRIVATE_KEY } from '~/constants';
 
 const TxTestPage = () => {
-  const getBalance = async () => {
-    const res = await publicClient.getBalance({
-      address: '0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258',
+  interface TransferToken {
+    from: `0x${string}`;
+    to: `0x${string}`;
+    value: string;
+  }
+  const transferToken = async ({ from, to, value }: TransferToken) => {
+    const account = privateKeyToAccount(from);
+
+    const sentTx = await walletClient.sendTransaction({
+      account,
+      to,
+      value: parseEther(value),
+      chain: polygonMumbai,
+      maxFeePerGas: parseGwei('2.5'),
+      maxPriorityFeePerGas: parseGwei('1.5'),
     });
 
-    return formatEther(res);
-  };
-
-  const serializeTx = () => {
-    const serialized = serializeTransaction({
-      chainId: 80001,
-      gas: 21001n,
-      maxFeePerGas: parseGwei('20'),
-      maxPriorityFeePerGas: parseGwei('2'),
-      nonce: 69,
-      to: '0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258',
-      value: parseEther('0.0001'),
+    const transaction = await publicClient.waitForTransactionReceipt({
+      hash: sentTx,
     });
-
-    return serialized;
+    console.log('transaction', transaction);
   };
 
-  const serializeTx2 = (parsed: TransactionSerializableEIP1559, signature: Signature) => {
-    const serialized = serializeTransaction(parsed, signature);
-
-    return serialized;
-  };
-
-  const parseTx = (tx: `0x02${string}`) => {
-    const parsed = parseTransaction(tx);
-
-    return parsed;
-  };
-
-  const signTx = async (tx: TransactionSerializableEIP1559) => {
-    const account = privateKeyToAccount(TESTER_PRIVATE_KEY);
-    console.log(account.address);
-
-    const signedTx = await account.signTransaction(tx);
-    console.log('signedTx', signedTx);
-
-    const gasPrice = await publicClient.getGasPrice();
-    console.log('gasPrice', gasPrice);
-
-    // const sentTx = await walletClient.sendTransaction({
-    //   account,
-    //   to: '0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258',
-    //   value: parseEther('0.01'),
-    //   chain: mumbai,
-    //   gas: gasPrice,
-    // });
-    // console.log(sentTx);
-  };
-
-  useEffect(() => {
-    const balance = getBalance();
-    const serialized = serializeTx();
-    const parsed = parseTx(serialized);
-    const signed = signTx(parsed);
-  }, []);
-
-  return <Wrapper></Wrapper>;
+  return (
+    <Wrapper>
+      <ButtonFilled
+        text="transfer token 0.0001 MATIC"
+        primary="medium"
+        onClick={() =>
+          transferToken({
+            from: TESTER_PRIVATE_KEY as `0x${string}`,
+            to: '0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258',
+            value: '0.0001',
+          })
+        }
+      />
+    </Wrapper>
+  );
 };
 
 const Wrapper = tw.div``;
