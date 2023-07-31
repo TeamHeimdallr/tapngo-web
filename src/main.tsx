@@ -1,5 +1,5 @@
 import '~/styles/index.css';
-import '~/configs/polyfill-wallet';
+import '~/configs/polyfill-window';
 
 import { createRoot } from 'react-dom/client';
 

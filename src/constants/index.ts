@@ -48,3 +48,5 @@ export const WALLETCONNECT_PROJECT_ID = import.meta.env.VITE_WALLETCONNECT_PROJE
 
 export const PROVIDER_WSS_ENDPOINT = import.meta.env.VITE_PROVIDER_WSS_ENDPOINT;
 export const PROVIDER_HTTP_ENDPOINT = import.meta.env.VITE_PROVIDER_HTTP_ENDPOINT;
+
+export const TESTER_PRIVATE_KEY = import.meta.env.VITE_TESTER_PRIVATE_KEY;

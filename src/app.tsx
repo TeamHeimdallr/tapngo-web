@@ -1,10 +1,11 @@
-import loadable from '@loadable/component';
+import { lazy } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import tw from 'twin.macro';
 
 import AppProvider from '~/hocs/hoc-provider';
 
-const MainPage = loadable(() => import('./pages/main'));
+const TxTestPage = lazy(() => import('./pages/tx-test'));
+const MainPage = lazy(() => import('./pages/main'));
 
 const RouteWrapper = tw.main`relative w-full h-full`;
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
         <RouteWrapper>
           <Routes>
             <Route path="/" element={<MainPage />} />
+            <Route path="/tx-test" element={<TxTestPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </RouteWrapper>
