@@ -1,26 +1,31 @@
-import tw, { css, styled } from 'twin.macro';
+import { useNavigate } from 'react-router-dom';
+import tw, { styled } from 'twin.macro';
 
 import { IconBack } from '../icons';
 
-export const Gnb = () => {
+interface Props {
+  landing?: boolean;
+}
+
+export const Gnb = ({ landing }: Props) => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    if (landing) navigate('/');
+    else navigate(-1);
+  };
   return (
     <Wrapper>
       <IconWrapper>
-        <IconBack />
+        <IconBack onClick={handleClick} />
       </IconWrapper>
     </Wrapper>
   );
 };
 const Wrapper = styled.div(() => [
-  css`
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    height: 54;
-    display: flex;
-    padding: 15px 16px;
-    align-items: center;
-    z-index: 20;
+  tw`
+    absolute top-0 left-0
+    h-54 w-360 flex items-center py-15 px-16
+    z-20
   `,
 ]);
 
