@@ -14,7 +14,7 @@ export const Input = ({ status, value, handleChange }: Props) => {
   return (
     <Wrapper>
       <Container status={status}>
-        <Text type={TYPE.SB_24}>₩</Text>
+        <Text type={TYPE.SB_20}>₩</Text>
         <BaseInput
           status={status}
           placeholder="가격을 입력해주세요."
@@ -48,15 +48,15 @@ const Container = styled.div<Props>(({ status }) => [
 
 const BaseInput = styled.input<Props>(() => [
   tw`
-    font-sb-24 border-none bg-transparent
+    font-sb-20 border-none bg-transparent
   `,
   css`
     &::placeholder {
       font-family: Pretendard Variable;
-      font-size: 24px;
+      font-size: 20px;
       font-style: normal;
       font-weight: 600;
-      line-height: 32px; /* 133.333% */
+      line-height: 28px; /* 133.333% */
     }
   `,
 ]);
