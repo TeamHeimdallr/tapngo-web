@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 
+import { useAlchemyGetOwnersForToken } from '~/api/api-contract/alchemy/get-owners-for-token';
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
@@ -11,10 +12,16 @@ import { IconCancel, IconCheck, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 
-export const Ticketing = () => {
+const TicketingPage = () => {
   const navigate = useNavigate();
   const [isDone] = useState<boolean>(true);
   const [isError] = useState<boolean>(true);
+
+  // TODO: 데이터 가공 후 화면에 보여주기
+  const { data: nftOwner } = useAlchemyGetOwnersForToken({
+    contractAddress: '0x',
+    tokenId: '',
+  });
 
   useEffect(() => {
     // TODO : connect
@@ -71,16 +78,15 @@ export const Ticketing = () => {
   );
 };
 
+export default TicketingPage;
+
 interface Props {
   isDone?: boolean;
   isError?: boolean;
 }
 
 const Wrapper = styled.div<Props>(({ isDone, isError }) => [
-  tw`
-    relative 
-    w-360 h-screen px-16 
-  `,
+  tw`relative h-screen px-16 w-360`,
   isDone && !isError && tw`bg-green`,
   isDone && isError && tw`bg-red`,
 ]);

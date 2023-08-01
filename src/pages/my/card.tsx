@@ -10,7 +10,7 @@ import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 
-export const Card = () => {
+const CardPage = () => {
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
   const [cardData, setCardData] = useState('');
@@ -61,6 +61,9 @@ export const Card = () => {
     </Layout>
   );
 };
+
+export default CardPage;
+
 const Wrapper = tw.div`
   relative 
   w-360 h-screen px-16 
