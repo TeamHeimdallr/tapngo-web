@@ -1,14 +1,17 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { Divider } from '~/components/divider';
+import { IconLogout } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 import { parseNumberWithComma } from '~/utils/number';
 
 export const History = () => {
+  const navigate = useNavigate();
   const [isHistory, setIsHistory] = useState(true);
   const [isNft, setIsNft] = useState(false);
 
@@ -26,7 +29,12 @@ export const History = () => {
   return (
     <Layout>
       <Wrapper>
-        <Text type={TYPE.SB_24}>내 지갑</Text>
+        <TitleContainer>
+          <Text type={TYPE.SB_24}>내 지갑</Text>
+          <IconContainer onClick={() => navigate('/my')}>
+            <IconLogout />
+          </IconContainer>
+        </TitleContainer>
         <Divider bottom={40} />
         <AssetWrapper>
           <AssetContainer>
@@ -174,4 +182,10 @@ const Image = tw.img`
 `;
 const TextContainer = tw.div`
   flex flex-col
+`;
+const TitleContainer = tw.div`
+  flex justify-between
+`;
+const IconContainer = tw.div`
+  clickable
 `;
