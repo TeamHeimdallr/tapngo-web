@@ -43,7 +43,7 @@ const CardPage = () => {
         if (pkey) {
           const { address } = privateKeyToAccount(`0x${pkey}`);
           const auth = { account: address };
-          setAddress(address);
+          setAddress(address.slice(0, 5) + '...' + address.slice(-4));
           localStorage.setItem('card', JSON.stringify(auth));
 
           setIsLogin(true);
