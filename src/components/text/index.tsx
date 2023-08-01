@@ -1,17 +1,19 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import tw, { styled } from 'twin.macro';
+import tw, { css, styled } from 'twin.macro';
 
+import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 
 interface Props extends HTMLAttributes<HTMLElement> {
   children: ReactNode;
   type?: string;
   clickable?: boolean;
+  color?: string;
 }
 
-export const Text = ({ children, type, ...rest }: Props) => {
+export const Text = ({ children, type, color, ...rest }: Props) => {
   return (
-    <BaseText type={type} {...rest}>
+    <BaseText type={type} color={color} {...rest}>
       {children}
     </BaseText>
   );
@@ -20,9 +22,13 @@ export const Text = ({ children, type, ...rest }: Props) => {
 interface BaseProps {
   type?: string;
   clickable?: boolean;
+  color?: string;
 }
 
-const BaseText = styled.span(({ type = TYPE.R_14, clickable }: BaseProps) => [
+const BaseText = styled.span(({ type = TYPE.R_14, clickable, color = COLOR.BLACK }: BaseProps) => [
+  css`
+    color: ${color};
+  `,
   clickable && tw`clickable`,
   type === TYPE.R_12 && tw`font-r-12`,
   type === TYPE.R_14 && tw`font-r-14`,
