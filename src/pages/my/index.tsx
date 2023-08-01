@@ -5,6 +5,7 @@ import tw, { styled } from 'twin.macro';
 
 import { useAlchemyGetNfts } from '~/api/api-contract/alchemy/get-nfts';
 import { useAlchemyPostAssetTransfers } from '~/api/api-contract/alchemy/post-asset-transfers';
+import { useAlchemyPostGetTokenBalance } from '~/api/api-contract/alchemy/post-get-token-balances';
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { Divider } from '~/components/divider';
@@ -27,6 +28,14 @@ const MyPage = () => {
 
   const { data: nftsData } = useAlchemyGetNfts({ owner: cardData }, { enabled: false });
   const ownedNfts = nftsData?.ownedNfts;
+
+  const { data: maticData, mutateAsync: postGetTokenBalance } = useAlchemyPostGetTokenBalance();
+  const maticWonRaw = Number(maticData?.balance || 0) * MATIC_PRICE.WON;
+  const formattedMaticWon = Number(parseFloat(maticWonRaw, 2));
+  const formattedMaticWonWithUnit =
+    formattedMaticWon > 100000
+      ? parseNumberWithUnit(formattedMaticWon)
+      : parseNumberWithComma(formattedMaticWon);
 
   const handleClickAdd = () => {
     navigate('/my/card');
@@ -62,6 +71,7 @@ const MyPage = () => {
   useEffect(() => {
     if (!cardData) return;
     postAssetTransfers({ walletAddress: cardData as `0x${string}` });
+    postGetTokenBalance({ walletAddress: cardData as `0x${string}` });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cardData]);
 
@@ -81,9 +91,9 @@ const MyPage = () => {
               <AssetContainer>
                 <Text type={TYPE.R_14}>마이페이지</Text>
                 <Divider bottom={4} />
-                <Text type={TYPE.SB_20}>₩ {parseNumberWithComma(10000)}</Text>
+                <Text type={TYPE.SB_20}>₩ {formattedMaticWonWithUnit}</Text>
                 <TextWrapper>
-                  <Text type={TYPE.R_12}>0.01 ETH</Text>
+                  <Text type={TYPE.R_12}>{`${maticData?.balance ?? 0} MATIC`}</Text>
                 </TextWrapper>
               </AssetContainer>
             </AssetWrapper>

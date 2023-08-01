@@ -221,3 +221,45 @@ export interface GetContractMetadataResponse {
     };
   };
 }
+
+/**
+ * Post get token balance
+ */
+
+/**
+ * request
+ */
+export interface PostGetTokenBalanceRequest {
+  id?: number;
+  jsonrpc: '2.0';
+  method: 'alchemy_getTokenBalances';
+  params: [string, `0x${string}`[]];
+}
+
+/**
+ * response
+ */
+export interface PostGetTokenBalanceResponse {
+  jsonrpc: string;
+  id: number;
+  result: {
+    address: string;
+    tokenBalances: {
+      contractAddress: string;
+      tokenBalance: string;
+    }[];
+    pageKey: string;
+  };
+}
+
+export interface PostGetTokenBalance {
+  walletAddress: `0x${string}`;
+}
+export interface TokenBalance {
+  balance: string;
+}
+export type UseAlchemyPostGetTokenBalance = UseMutationOptions<
+  TokenBalance,
+  AxiosError<TokenBalance, PostGetTokenBalance>,
+  PostGetTokenBalance
+>;

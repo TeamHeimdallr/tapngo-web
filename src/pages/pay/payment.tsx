@@ -15,8 +15,8 @@ import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 import { publicClient, walletClient } from '~/configs/setup-contract';
-import { MUMBAI_SCANNER_URL } from '~/constants';
-import { parseNumberWithComma } from '~/utils/number';
+import { MATIC_PRICE, MUMBAI_SCANNER_URL } from '~/constants';
+import { parseFloat, parseNumberWithComma, parseNumberWithUnit } from '~/utils/number';
 import { sha256Hash } from '~/utils/string';
 
 export const PaymentPage = () => {
@@ -110,6 +110,13 @@ export const PaymentPage = () => {
     window.open(`${MUMBAI_SCANNER_URL}/tx/${txhash}`);
   };
 
+  const maticRaw = Number(price) / MATIC_PRICE.WON;
+  const formattedMaticWon = Number(parseFloat(maticRaw, 4));
+  const formattedMaticWonWithUnit =
+    formattedMaticWon > 100000
+      ? parseNumberWithUnit(formattedMaticWon)
+      : parseNumberWithComma(formattedMaticWon);
+
   return (
     <Layout>
       <Wrapper>
@@ -134,7 +141,7 @@ export const PaymentPage = () => {
             </div>
             <Divider bottom={4} />
             <Text type={TYPE.R_14} color={COLOR.GRAY6}>
-              ${Math.floor((10000 * Number(price)) / 2340000) / 10000} ETH
+              {formattedMaticWonWithUnit} MATIC
             </Text>
             {txhash && (
               <>

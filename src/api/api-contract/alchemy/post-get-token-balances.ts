@@ -1,69 +1,59 @@
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
+import { formatEther, fromHex } from 'viem';
 
 import {
-  GetAssetTransfers,
-  GetAssetTransfersRequest,
-  GetAssetTransfersResponse,
-  Transfers,
-  UseAlchemyPostAssetTransfers,
+  PostGetTokenBalance,
+  PostGetTokenBalanceRequest,
+  PostGetTokenBalanceResponse,
+  TokenBalance,
+  UseAlchemyPostGetTokenBalance,
 } from '~/api/api-contract/alchemy/types';
-import { ALCHEMY_POLYGON_MUMBAI_API_KEY } from '~/constants';
+import { ALCHEMY_POLYGON_MUMBAI_API_KEY, CONTRACT_ADDRESS } from '~/constants';
+import { parseFloat, parseNumberWithComma, parseNumberWithUnit } from '~/utils/number';
 
 import { alchemyApi } from '..';
 
-export const useAlchemyPostAssetTransfers = (options?: UseAlchemyPostAssetTransfers) =>
-  useMutation<Transfers[], AxiosError<Transfers[], GetAssetTransfers>, GetAssetTransfers>(
-    ['alchemy', 'post', 'asset-transfers'],
-    assetTransfersAxios,
+/**
+ *
+ * @returns MATIC balance
+ */
+export const useAlchemyPostGetTokenBalance = (options?: UseAlchemyPostGetTokenBalance) =>
+  useMutation<TokenBalance, AxiosError<TokenBalance, PostGetTokenBalance>, PostGetTokenBalance>(
+    ['alchemy', 'post', 'get-token-balance'],
+    postGetTokenBalance,
     { ...options }
   );
 
-const assetTransfersAxios = async ({ walletAddress }: GetAssetTransfers) => {
-  const postReceiveTransfers = async () =>
-    (
-      await alchemyApi.post<
-        GetAssetTransfersResponse,
-        AxiosResponse<GetAssetTransfersResponse, GetAssetTransfersRequest>,
-        GetAssetTransfersRequest
-      >(`/v2/${ALCHEMY_POLYGON_MUMBAI_API_KEY}`, {
-        id: 1,
-        jsonrpc: '2.0',
-        method: 'alchemy_getAssetTransfers',
-        params: [
-          {
-            category: ['external'],
-            toAddress: walletAddress,
-            withMetadata: true,
-          },
-        ],
-      })
-    ).data;
+const postGetTokenBalance = async ({ walletAddress }: PostGetTokenBalance) => {
+  const res = (
+    await alchemyApi.post<
+      PostGetTokenBalanceResponse,
+      AxiosResponse<PostGetTokenBalanceResponse, PostGetTokenBalanceRequest>,
+      PostGetTokenBalanceRequest
+    >(`/v2/${ALCHEMY_POLYGON_MUMBAI_API_KEY}`, {
+      id: 1,
+      jsonrpc: '2.0',
+      method: 'alchemy_getTokenBalances',
+      params: [walletAddress, [CONTRACT_ADDRESS.MATIC]],
+    })
+  ).data;
 
-  const postSentTransfers = async () =>
-    (
-      await alchemyApi.post<
-        GetAssetTransfersResponse,
-        AxiosResponse<GetAssetTransfersResponse, GetAssetTransfersRequest>,
-        GetAssetTransfersRequest
-      >(`/v2/${ALCHEMY_POLYGON_MUMBAI_API_KEY}`, {
-        id: 1,
-        jsonrpc: '2.0',
-        method: 'alchemy_getAssetTransfers',
-        params: [
-          {
-            category: ['external'],
-            fromAddress: walletAddress,
-          },
-        ],
-      })
-    ).data;
+  const tokenBalances = res.result.tokenBalances;
+  const hex = tokenBalances.find(
+    tokenBalance => tokenBalance.contractAddress === CONTRACT_ADDRESS.MATIC
+  )?.tokenBalance;
 
-  const [receive, send] = await Promise.all([postReceiveTransfers(), postSentTransfers()]);
+  if (!hex) return { balance: '0' };
+  const balance = formatEther(fromHex(hex as `0x${string}`, 'bigint'));
 
-  const allsortedTransfer = [...receive.result.transfers, ...send.result.transfers].sort(
-    (a, b) => Number(b.blockNum) - Number(a.blockNum)
-  );
+  const formattedNumber = Number(parseFloat(Number(balance || 0), 4));
+  const formattedWithUnit =
+    formattedNumber > 100000
+      ? parseNumberWithUnit(formattedNumber)
+      : parseNumberWithComma(formattedNumber);
 
-  return allsortedTransfer;
+  return {
+    balance: formattedWithUnit,
+  };
 };
