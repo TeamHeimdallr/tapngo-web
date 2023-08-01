@@ -245,7 +245,7 @@ export default MyPage;
 const Wrapper = tw.div`
   w-360 px-16 pt-60 pb-72
   flex flex-col gap-40
-  overflow-hidden
+  overflow-x-hidden
 `;
 
 const AddCardContainer = tw.div`
