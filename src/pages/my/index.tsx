@@ -312,11 +312,9 @@ const CopyAddressWrapper = styled.div<Props>(({ isCopied }) => [
   tw`
   flex gap-4 pl-8 pr-6
   items-center rounded-10
-  w-100 clickable
-  relative
-  transition-all
+  w-100 clickable 
 `,
-  isCopied && tw`w-58 transition-all `,
+  isCopied && tw`w-58`,
 ]);
 
 interface NftWrapper {
