@@ -31,7 +31,9 @@ export const Input = ({ status, value, handleChange }: Props) => {
       </Container>
       {status === 'error' && (
         <ErrorContainer>
-          <Text type={TYPE.R_16}>숫자만 입력해주세요.</Text>
+          <Text type={TYPE.R_16} color={COLOR.RED}>
+            숫자만 입력해주세요.
+          </Text>
         </ErrorContainer>
       )}
     </Wrapper>
