@@ -1,7 +1,8 @@
+import copy from 'copy-to-clipboard';
 import { format } from 'date-fns';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import tw, { styled } from 'twin.macro';
+import tw, { css, styled } from 'twin.macro';
 
 import { useAlchemyGetNfts } from '~/api/api-contract/alchemy/get-nfts';
 import { useAlchemyPostAssetTransfers } from '~/api/api-contract/alchemy/post-asset-transfers';
@@ -9,7 +10,7 @@ import { useAlchemyPostGetTokenBalance } from '~/api/api-contract/alchemy/post-g
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { Divider } from '~/components/divider';
-import { IconLogout, IconPlus } from '~/components/icons';
+import { IconCopy, IconLogout, IconPlus } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 import { MATIC_PRICE, MUMBAI_SCANNER_URL } from '~/constants';
@@ -22,6 +23,7 @@ const MyPage = () => {
   const [cardData, setCardData] = useState('');
   const [isHistory, setIsHistory] = useState(true);
   const [isNft, setIsNft] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const { data: assetTransfersData, mutateAsync: postAssetTransfers } =
     useAlchemyPostAssetTransfers();
@@ -60,6 +62,14 @@ const MyPage = () => {
     } else return;
   };
 
+  const handleCopy = () => {
+    copy(cardData);
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
+  };
+
   useEffect(() => {
     const auth = localStorage.getItem('card');
     if (auth) {
@@ -89,7 +99,22 @@ const MyPage = () => {
             <Divider bottom={40} />
             <AssetWrapper>
               <AssetContainer>
-                <Text type={TYPE.R_14}>마이페이지</Text>
+                {isCopied ? (
+                  <CopyAddressWrapper isCopied={isCopied}>
+                    <Text color={COLOR.GRAY7} type={TYPE.R_12}>
+                      Copied!
+                    </Text>
+                  </CopyAddressWrapper>
+                ) : (
+                  <>
+                    <CopyAddressWrapper isCopied={isCopied} onClick={handleCopy}>
+                      <Text color={COLOR.GRAY7} type={TYPE.R_12}>
+                        {cardData.slice(0, 5) + '...' + cardData.slice(-4)}
+                      </Text>
+                      <IconCopy width={10} height={10} />
+                    </CopyAddressWrapper>
+                  </>
+                )}
                 <Divider bottom={4} />
                 <Text type={TYPE.SB_20}>₩ {formattedMaticWonWithUnit}</Text>
                 <TextWrapper>
@@ -226,6 +251,7 @@ const AddCardContainer = tw.div`
   h-122 w-full bg-gray1 gap-8
   flex flex-col flex-center
   clickable rounded-8
+  
 `;
 
 const HistoryWrapper = tw.div`
@@ -274,6 +300,22 @@ const Row_2 = tw.div`
 const Row_3 = tw.div`
   flex justify-end
 `;
+
+interface Props {
+  isCopied?: boolean;
+}
+
+const CopyAddressWrapper = styled.div<Props>(({ isCopied }) => [
+  css`
+    background: rgba(255, 255, 255, 0.4);
+  `,
+  tw`
+  flex gap-4 pl-8 pr-6
+  items-center rounded-10
+  w-100 clickable 
+`,
+  isCopied && tw`w-58`,
+]);
 
 interface NftWrapper {
   empty?: boolean;
