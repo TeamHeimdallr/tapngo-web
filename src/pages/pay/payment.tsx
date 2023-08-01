@@ -132,7 +132,7 @@ export const PaymentPage = () => {
                 <TxhashWrapper onClick={handleOpenHashWindow}>
                   <TxhashContainer>
                     <Text type={TYPE.R_12} color={COLOR.GRAY5}>
-                      Tx Hash
+                      AA Scan
                     </Text>
                     <Txhash>
                       <Text type={TYPE.R_12} color={COLOR.GRAY7}>
