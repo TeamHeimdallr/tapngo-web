@@ -38,7 +38,6 @@ const CardPage = () => {
         // console.log(`> Serial Number: ${serialNumber}`);
         // console.log(`> Records: (${message.records.length})`);
 
-        // TODO: AA and ZK
         const pkey = sha256Hash(serialNumber);
         if (pkey) {
           const address = await getAddress(`0x${pkey}`);

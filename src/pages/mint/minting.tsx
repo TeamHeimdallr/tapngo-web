@@ -11,7 +11,7 @@ import { Gnb } from '~/components/gnb';
 import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
-import { CONTRACT_ADDRESS, JIFFY_SCAN } from '~/constants';
+import { AA_SCANNER_URL, CONTRACT_ADDRESS } from '~/constants';
 import { sha256Hash } from '~/utils/string';
 
 const MintingPage = () => {
@@ -51,7 +51,8 @@ const MintingPage = () => {
     }
   };
   const handleOpenHashWindow = () => {
-    window.open(`${JIFFY_SCAN}/userOpHash/${txhash}?network=mumbai`);
+    window.open(`${AA_SCANNER_URL}/op/${txhash}`);
+    // window.open(`${JIFFY_SCAN}/userOpHash/${txhash}?network=mumbai`);
   };
 
   const mint = async () => {
@@ -95,7 +96,7 @@ const MintingPage = () => {
             {isDone ? (
               <Text type={TYPE.SB_16}>NFT 민팅이 완료되었습니다.</Text>
             ) : isLoading ? (
-              <Text type={TYPE.SB_16}>결제가 진행중입니다.</Text>
+              <Text type={TYPE.SB_16}>민팅이 진행중입니다.</Text>
             ) : (
               <Text type={TYPE.SB_16}>NFC 카드를 탭하여 민팅을 진행해주세요.</Text>
             )}
