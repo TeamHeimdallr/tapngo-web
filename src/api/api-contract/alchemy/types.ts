@@ -179,6 +179,24 @@ export interface GetOwnersForTokenResponse {
 }
 
 /**
+ * Get owners for collection
+ */
+
+/**
+ * request
+ */
+export interface GetOwnersForCollectionRequest {
+  contractAddress: `0x${string}`;
+}
+
+/**
+ * response
+ */
+export interface GetOwnersForCollectionResponse {
+  owners: `0x${string}`[];
+}
+
+/**
  * Get contract metadata
  */
 

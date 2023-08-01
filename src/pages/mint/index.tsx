@@ -24,7 +24,7 @@ const MintPage = () => {
           <Container>
             <Text type={TYPE.SB_24}>NFT 민팅</Text>
             <MintingWrapper>
-              <Image src="poap.png" alt="" />
+              <Image src="/poap.png" alt="" />
               <Divider bottom={16} />
               <Text type={TYPE.SB_16}>SWF 2023 해커톤 참가</Text>
               <Divider bottom={4} />
