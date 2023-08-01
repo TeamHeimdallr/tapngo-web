@@ -13,7 +13,7 @@ import { Divider } from '~/components/divider';
 import { IconCopy, IconLogout, IconPlus, IconSwap } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
-import { MATIC_PRICE, MUMBAI_SCANNER_URL } from '~/constants';
+import { FORMAT_NUMBER_THRESHOLD, MATIC_PRICE, MUMBAI_SCANNER_URL } from '~/constants';
 import { parseFloat, parseNumberWithComma, parseNumberWithUnit } from '~/utils/number';
 import { truncateAddress } from '~/utils/string';
 import { DATE_FORMATTER } from '~/utils/time';
@@ -28,14 +28,14 @@ const MyPage = () => {
   const { data: assetTransfersData, mutateAsync: postAssetTransfers } =
     useAlchemyPostAssetTransfers();
 
-  const { data: nftsData } = useAlchemyGetNfts({ owner: cardData }, { enabled: true });
+  const { data: nftsData } = useAlchemyGetNfts({ owner: cardData });
   const ownedNfts = nftsData?.ownedNfts;
 
   const { data: maticData, mutateAsync: postGetTokenBalance } = useAlchemyPostGetTokenBalance();
   const maticWonRaw = Number(maticData?.balance || 0) * MATIC_PRICE.WON;
   const formattedMaticWon = Number(parseFloat(maticWonRaw, 2));
   const formattedMaticWonWithUnit =
-    formattedMaticWon > 100000
+    formattedMaticWon > FORMAT_NUMBER_THRESHOLD
       ? parseNumberWithUnit(formattedMaticWon)
       : parseNumberWithComma(formattedMaticWon);
 
@@ -165,11 +165,11 @@ const MyPage = () => {
                     );
 
                     const formattedWithUnit =
-                      formattedNumber > 100000
+                      formattedNumber > FORMAT_NUMBER_THRESHOLD
                         ? parseNumberWithUnit(formattedNumber)
                         : parseNumberWithComma(formattedNumber);
                     const formattedWonWithUnit =
-                      formattedNumberWon > 100000
+                      formattedNumberWon > FORMAT_NUMBER_THRESHOLD
                         ? parseNumberWithUnit(formattedNumberWon)
                         : parseNumberWithComma(formattedNumberWon);
 
@@ -328,11 +328,7 @@ const CopyAddressWrapper = styled.div<Props>(({ isCopied }) => [
   css`
     background: rgba(255, 255, 255, 0.4);
   `,
-  tw`
-  flex gap-4 pl-8 pr-6
-  items-center rounded-10
-  w-100 clickable
-`,
+  tw`flex items-center gap-4 pl-8 pr-6 rounded-10 w-100 clickable`,
   isCopied && tw`w-58`,
 ]);
 

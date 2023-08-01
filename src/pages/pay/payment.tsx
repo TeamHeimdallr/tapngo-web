@@ -15,7 +15,7 @@ import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 import { publicClient, walletClient } from '~/configs/setup-contract';
-import { MATIC_PRICE, MUMBAI_SCANNER_URL } from '~/constants';
+import { FORMAT_NUMBER_THRESHOLD, MATIC_PRICE, MUMBAI_SCANNER_URL } from '~/constants';
 import { parseFloat, parseNumberWithComma, parseNumberWithUnit } from '~/utils/number';
 import { sha256Hash } from '~/utils/string';
 
@@ -113,7 +113,7 @@ export const PaymentPage = () => {
   const maticRaw = Number(price) / MATIC_PRICE.WON;
   const formattedMaticWon = Number(parseFloat(maticRaw, 4));
   const formattedMaticWonWithUnit =
-    formattedMaticWon > 100000
+    formattedMaticWon > FORMAT_NUMBER_THRESHOLD
       ? parseNumberWithUnit(formattedMaticWon)
       : parseNumberWithComma(formattedMaticWon);
 

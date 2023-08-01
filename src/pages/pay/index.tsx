@@ -9,7 +9,6 @@ import { Input } from '~/components/input';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 import { useDebounce } from '~/hooks/data/use-debounce';
-import { parseNumberWithComma } from '~/utils/number';
 
 const PayPage = () => {
   const navigate = useNavigate();
