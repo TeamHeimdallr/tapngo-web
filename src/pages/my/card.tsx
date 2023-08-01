@@ -14,8 +14,7 @@ import { sha256Hash } from '~/utils/string';
 
 const CardPage = () => {
   const navigate = useNavigate();
-  const [txhash, _] = useState('');
-  const [__, setPrivateKey] = useState('');
+  const [isLogin, setIsLogin] = useState(false);
 
   const handleNfcReading = async () => {
     if (typeof NDEFReader === 'undefined') {
@@ -40,10 +39,13 @@ const CardPage = () => {
 
         // TODO: AA and ZK
         const pkey = sha256Hash(serialNumber);
-        setPrivateKey('0x' + pkey);
-        const { address } = privateKeyToAccount(`0x${pkey}`);
-        const auth = { account: address };
-        localStorage.setItem('card', JSON.stringify(auth));
+        if (pkey) {
+          const { address } = privateKeyToAccount(`0x${pkey}`);
+          const auth = { account: address };
+          localStorage.setItem('card', JSON.stringify(auth));
+
+          setIsLogin(true);
+        }
       });
     } catch (error) {
       console.error('Error while scanning NFC:', error);
@@ -60,7 +62,7 @@ const CardPage = () => {
         <Gnb />
         <Body>
           <Container>
-            {txhash ? (
+            {isLogin ? (
               <>
                 <IconChecked width={80} height={80} />
                 <Divider bottom={24} />
@@ -81,7 +83,7 @@ const CardPage = () => {
           </Container>
           <ButtonFilled
             onClick={() => navigate('/my')}
-            isLoading={!txhash}
+            isLoading={!isLogin}
             width={328}
             text="확인"
             primary={'large'}
@@ -95,8 +97,8 @@ const CardPage = () => {
 export default CardPage;
 
 const Wrapper = tw.div`
-  relative 
-  w-360 h-screen px-16 
+  relative
+  w-360 h-screen px-16
 `;
 const Body = tw.div`
   pt-54 pb-16 flex flex-col h-screen
