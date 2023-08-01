@@ -15,10 +15,9 @@ import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 import { publicClient, walletClient } from '~/configs/setup-contract';
+import { MUMBAI_SCANNER_URL } from '~/constants';
 import { parseNumberWithComma } from '~/utils/number';
 import { sha256Hash } from '~/utils/string';
-
-const URL = `https://mumbai.polygonscan.com/tx/`;
 
 export const PaymentPage = () => {
   const navigate = useNavigate();
@@ -105,7 +104,7 @@ export const PaymentPage = () => {
   }, []);
 
   const handleOpenHashWindow = () => {
-    window.open(`${URL}${txhash}`);
+    window.open(`${MUMBAI_SCANNER_URL}/tx/${txhash}`);
   };
 
   return (

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
+import { privateKeyToAccount } from 'viem/accounts';
 
-import { useAlchemyGetOwnersForToken } from '~/api/api-contract/alchemy/get-owners-for-token';
+import { useAlchemyGetOwnersForCollection } from '~/api/api-contract/alchemy/get-owners-for-collection';
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
@@ -11,21 +12,84 @@ import { Gnb } from '~/components/gnb';
 import { IconCancel, IconCheck, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
+import { CONTRACT_ADDRESS } from '~/constants';
+import { sha256Hash } from '~/utils/string';
 
 const TicketingPage = () => {
   const navigate = useNavigate();
-  const [isDone] = useState<boolean>(true);
-  const [isError] = useState<boolean>(true);
+  const [isDone, setDone] = useState<boolean>(false);
+  const [isError, setError] = useState<boolean>(false);
 
-  // TODO: 데이터 가공 후 화면에 보여주기
-  const { data: nftOwner } = useAlchemyGetOwnersForToken({
-    contractAddress: '0x',
-    tokenId: '',
+  const [privateKey, setPrivateKey] = useState('');
+  const [address, setAddress] = useState('');
+
+  const { data: nftOwner } = useAlchemyGetOwnersForCollection({
+    contractAddress: CONTRACT_ADDRESS.POAP,
   });
 
+  const isOwner = nftOwner?.owners
+    ?.map(owner => owner.toLowerCase())
+    ?.includes(address.toLowerCase() as `0x${string}`);
+
+  const handleNfcReading = async () => {
+    if (typeof NDEFReader === 'undefined') {
+      console.log('NFC is not supported in this browser.');
+      return;
+    }
+
+    try {
+      console.log('NFC Reading Start');
+      const ndef = new NDEFReader();
+      await ndef.scan();
+
+      ndef.addEventListener('readingerror', () => {
+        console.log('Argh! Cannot read data from the NFC tag. Try another one?');
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ndef.addEventListener('reading', (event: any) => {
+        const { _, serialNumber } = event;
+        // console.log(`> Serial Number: ${serialNumber}`);
+        // console.log(`> Records: (${message.records.length})`);
+
+        // TODO: AA and ZK
+        const pkey = sha256Hash(serialNumber);
+        const account = privateKeyToAccount(privateKey as `0x${string}`);
+
+        setPrivateKey('0x' + pkey);
+        setAddress(account.address);
+      });
+    } catch (error) {
+      console.error('Error while scanning NFC:', error);
+    }
+  };
+
   useEffect(() => {
-    // TODO : connect
-    // setIsDone()
+    // idle
+    if (!address) return;
+
+    // is owner - pass
+    if (isOwner) {
+      setError(false);
+      setDone(true);
+    }
+
+    // is not owner - fail
+    else {
+      setError(true);
+      setDone(true);
+    }
+
+    // rollback
+    return () => {
+      setError(false);
+      setDone(false);
+    };
+  }, [address, isOwner]);
+
+  useEffect(() => {
+    handleNfcReading();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

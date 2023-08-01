@@ -10753,6 +10753,7 @@ __metadata:
     usehooks-ts: ^2.9.1
     viem: ^1.4.2
     vite: ^4.4.7
+    vite-plugin-compression2: ^0.10.3
     vite-plugin-node-polyfills: ^0.9.0
     vite-tsconfig-paths: ^4.2.0
     zustand: ^4.3.9
@@ -12608,6 +12609,15 @@ __metadata:
     typescript:
       optional: true
   checksum: 225f11847d4b4c1d19ada3d29638e138034702f251f955707766ef24e2a438effcc9130f3465d38657e5e88af19cf331a9eca9f40d4a6460454068be765babc1
+  languageName: node
+  linkType: hard
+
+"vite-plugin-compression2@npm:^0.10.3":
+  version: 0.10.3
+  resolution: "vite-plugin-compression2@npm:0.10.3"
+  dependencies:
+    "@rollup/pluginutils": ^5.0.2
+  checksum: 67cfad94c157773f4c4a42d08ce2324e31f9c9134f5ffcb8a9e225c5254d4eeaa98577d565c7d875a56fdbe149190cb443a96fb4e3a21d4ea06b863c6c41f579
   languageName: node
   linkType: hard
 
