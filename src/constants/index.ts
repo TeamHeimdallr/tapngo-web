@@ -51,3 +51,10 @@ export const PROVIDER_HTTP_ENDPOINT = import.meta.env.VITE_PROVIDER_HTTP_ENDPOIN
 
 export const ALCHEMY_POLYGON_MUMBAI_API_KEY = import.meta.env.VITE_ALCHEMY_POLYGON_MUMBAI_API_KEY;
 export const ALCHEMY_POLYGON_MUMBAI_API = 'https://polygon-mumbai.g.alchemy.com';
+
+export const MATIC_PRICE = {
+  DALLAR: 0.6777,
+  WON: 874.09,
+};
+
+export const MUMBAI_SCANNER_URL = `https://mumbai.polygonscan.com/`;

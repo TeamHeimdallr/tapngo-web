@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
@@ -10,7 +11,10 @@ import { Divider } from '~/components/divider';
 import { IconLogout, IconPlus } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
+import { MATIC_PRICE, MUMBAI_SCANNER_URL } from '~/constants';
 import { parseNumberWithComma } from '~/utils/number';
+import { truncateAddress } from '~/utils/string';
+import { DATE_FORMATTER } from '~/utils/time';
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -18,12 +22,14 @@ const MyPage = () => {
   const [isHistory, setIsHistory] = useState(true);
   const [isNft, setIsNft] = useState(false);
 
-  // TODO: 데이터 가공 후 화면에 보여주기
   const { data: assetTransfersData, mutateAsync: postAssetTransfers } =
     useAlchemyPostAssetTransfers();
 
-  // TODO: 데이터 가공 후 화면에 보여주기
-  const { data: nftsData } = useAlchemyGetNfts({ owner: '' }, { enabled: false });
+  const { data: nftsData } = useAlchemyGetNfts(
+    { owner: '0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258' },
+    { enabled: false }
+  );
+  const ownedNfts = nftsData?.ownedNfts;
 
   const handleClickAdd = () => {
     navigate('/my/card');
@@ -54,6 +60,11 @@ const MyPage = () => {
       const { account } = JSON.parse(auth);
       setCardData(account);
     }
+  }, []);
+
+  useEffect(() => {
+    postAssetTransfers({ walletAddress: '0x' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -96,22 +107,39 @@ const MyPage = () => {
             <Divider bottom={24} />
             <CardWrapper>
               {isHistory &&
-                [1, 2, 3].map(v => {
+                assetTransfersData &&
+                assetTransfersData.map(({ uniqueId, metadata, value, asset, from, hash }) => {
+                  const time = format(
+                    new Date(metadata.blockTimestamp || 0),
+                    DATE_FORMATTER.yyyy_MM_dd_HH_mm_ss
+                  );
+                  // const sent = from === walletAddress;
+                  const sent = true;
+                  const unit = sent ? '-' : '+';
+
+                  const handleOpenHashWindow = () => {
+                    window.open(`${MUMBAI_SCANNER_URL}/tx/${hash}`);
+                  };
+
                   return (
-                    <HistoryCardWrapper key={v}>
+                    <HistoryCardWrapper key={uniqueId}>
                       <HistoryCardContainer>
                         <Row_1>
                           <Text type={TYPE.R_12} color={COLOR.GRAY5}>
-                            날짜
+                            {time}
                           </Text>
                         </Row_1>
                         <Row_2>
-                          <Text type={TYPE.R_14}>이름</Text>
-                          <Text type={TYPE.SB_14}>+{parseNumberWithComma(9999)} 원</Text>
+                          <Text type={TYPE.R_14} onClick={handleOpenHashWindow}>
+                            {truncateAddress(hash as `0x${string}`)}
+                          </Text>
+                          <Text type={TYPE.SB_14}>
+                            {`${unit} ${parseNumberWithComma(MATIC_PRICE.WON * Number(value))} 원`}
+                          </Text>
                         </Row_2>
                         <Row_3>
                           <Text type={TYPE.R_12} color={COLOR.GRAY6}>
-                            0.01 ETH
+                            {`${value} ${asset}`}
                           </Text>
                         </Row_3>
                       </HistoryCardContainer>
@@ -121,14 +149,19 @@ const MyPage = () => {
             </CardWrapper>
             <NftWrapper>
               {isNft &&
-                [1].map(v => {
+                ownedNfts &&
+                ownedNfts.map(({ contract, id, title, media, timeLastUpdated }) => {
+                  const { address } = contract;
+                  const { tokenId } = id;
+                  const { gateway } = media[0];
+
                   return (
-                    <NftContainer key={v}>
-                      <Image src="/poap.png" />
+                    <NftContainer key={`${address}-${tokenId}`}>
+                      <Image src={`${gateway}`} />
                       <TextContainer>
-                        <Text type={TYPE.SB_14}>SWF 2023 해커톤 참가</Text>
+                        <Text type={TYPE.SB_14}>{title}</Text>
                         <Text type={TYPE.R_12} color={COLOR.GRAY5}>
-                          2023년 7월 31일
+                          {format(new Date(timeLastUpdated), DATE_FORMATTER.yyyy_MM_dd)}
                         </Text>
                       </TextContainer>
                     </NftContainer>
@@ -153,7 +186,7 @@ const MyPage = () => {
 export default MyPage;
 
 const Wrapper = tw.div`
-  w-360 px-16 pt-60
+  w-360 px-16 pt-60 pb-72
   flex flex-col gap-40
 `;
 
@@ -164,7 +197,6 @@ const AddCardContainer = tw.div`
 `;
 
 const HistoryWrapper = tw.div`
-  w-360 px-16 pt-60
   flex flex-col 
 `;
 
@@ -212,13 +244,13 @@ const Row_3 = tw.div`
 `;
 
 const NftWrapper = tw.div`
-  flex gap-16
+  grid grid-cols-2 gap-16
 `;
 const NftContainer = tw.div`
   flex flex-col gap-12
 `;
 const Image = tw.img`
-  w-156 h-156
+  w-156 h-156 rounded-8
 `;
 const TextContainer = tw.div`
   flex flex-col

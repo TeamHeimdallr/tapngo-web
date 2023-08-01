@@ -1,6 +1,8 @@
 import { formatDistanceToNowStrict, formatDuration, intervalToDuration } from 'date-fns';
 
 export const DATE_FORMATTER = {
+  yyyy_MM_dd_HH_mm_ss: 'yyyy/MM/dd HH:mm:ss',
+  yyyy_MM_dd: 'yyyy년 MM월 dd일',
   MMM_d_yyyy: 'MMM d, yyyy',
   HHMM_AA_mm_dd: 'h:mm aa, MMM d',
   HHMMSS: 'HH:mm:ss',
