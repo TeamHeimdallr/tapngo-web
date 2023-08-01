@@ -38,7 +38,7 @@ const TitleContainer = tw.div`
   flex justify-between
 `;
 const Button = tw.button`
-  w-full h-120 flex-center
+  w-full h-120 flex-center text-black
   font-sb-16 clickable rounded-8
   bg-gray1
 `;
