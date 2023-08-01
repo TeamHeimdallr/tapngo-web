@@ -11,7 +11,7 @@ import { Gnb } from '~/components/gnb';
 import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
-import { FORMAT_NUMBER_THRESHOLD, MATIC_PRICE, MUMBAI_SCANNER_URL } from '~/constants';
+import { AA_SCANNER_URL, FORMAT_NUMBER_THRESHOLD, MATIC_PRICE } from '~/constants';
 import { parseFloat, parseNumberWithComma, parseNumberWithUnit } from '~/utils/number';
 import { sha256Hash } from '~/utils/string';
 
@@ -59,10 +59,10 @@ export const PaymentPage = () => {
   }
   const transferToken = async ({ from, to, value }: TransferToken) => {
     setLoading(true);
-    const txHash = await transfer(from, to, value);
+    const userOpHash = await transfer(from, to, value);
     setLoading(false);
 
-    return txHash ?? '';
+    return userOpHash ?? '';
   };
 
   const getTruncatedTxhash = () => {
@@ -89,7 +89,8 @@ export const PaymentPage = () => {
   }, []);
 
   const handleOpenHashWindow = () => {
-    window.open(`${MUMBAI_SCANNER_URL}/tx/${txhash}`);
+    // window.open(`${MUMBAI_SCANNER_URL}/tx/${txhash}`);
+    window.open(`${AA_SCANNER_URL}/op/${txhash}`);
   };
 
   const maticRaw = Number(price) / MATIC_PRICE.WON;

@@ -33,10 +33,11 @@ export default async function createToken(pkey: string, nft: string) {
     }
   );
   console.log(`UserOpHash: ${res.userOpHash}`);
+  return res.userOpHash ?? null;
 
-  console.log('Waiting for transaction...');
-  const ev = await res.wait();
-  console.log(`Transaction hash: ${ev?.transactionHash ?? null}`);
+  // console.log('Waiting for transaction...');
+  // const ev = await res.wait();
+  // console.log(`Transaction hash: ${ev?.transactionHash ?? null}`);
 
-  return ev?.transactionHash ?? null;
+  // return ev?.transactionHash ?? null;
 }

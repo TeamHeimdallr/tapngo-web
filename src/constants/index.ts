@@ -65,3 +65,4 @@ export const MATIC_PRICE = {
 export const MUMBAI_SCANNER_URL = `https://mumbai.polygonscan.com/`;
 
 export const FORMAT_NUMBER_THRESHOLD = 10000000;
+export const AA_SCANNER_URL = `https://aascan.org/polygon-mumbai`;
