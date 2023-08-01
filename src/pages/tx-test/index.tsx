@@ -10,6 +10,7 @@ import { sha256Hash } from '~/utils/string';
 
 const TxTestPage = () => {
   const [privateKey, setPrivateKey] = useState('');
+  const [status, setStatus] = useState('..');
 
   const handleNfcReading = async () => {
     if (typeof NDEFReader === 'undefined') {
@@ -33,7 +34,7 @@ const TxTestPage = () => {
         console.log(`> Records: (${message.records.length})`);
 
         const pkey = sha256Hash(serialNumber);
-        setPrivateKey(pkey);
+        setPrivateKey('0x' + pkey);
         console.log(pkey);
       });
     } catch (error) {
@@ -47,6 +48,10 @@ const TxTestPage = () => {
     value: string;
   }
   const transferToken = async ({ from, to, value }: TransferToken) => {
+    if (!from) {
+      return;
+    };
+
     const account = privateKeyToAccount(from);
 
     const sentTx = await walletClient.sendTransaction({
@@ -57,6 +62,8 @@ const TxTestPage = () => {
       maxFeePerGas: parseGwei('2.5'),
       maxPriorityFeePerGas: parseGwei('1.5'),
     });
+
+    setStatus(sentTx);
 
     const transaction = await publicClient.waitForTransactionReceipt({
       hash: sentTx,
@@ -78,6 +85,7 @@ const TxTestPage = () => {
           })
         }
       />
+      <div>{status}</div>
     </Wrapper>
   );
 };

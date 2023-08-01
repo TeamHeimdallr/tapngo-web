@@ -18,7 +18,7 @@ export const sha256Hash = (input: string) => {
   const hash = createHash('sha256');
 
   // Write the hex input to the hash object
-  hash.update(Buffer.from(hexInput, 'hex'));
+  hash.update(hexInput, 'hex');
 
   // Compute the hash and return as a hex string
   return hash.digest('hex');
