@@ -2,7 +2,8 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { compression } from 'vite-plugin-compression2';
+import { splitVendorChunkPlugin } from 'vite';
 
 export default defineConfig({
   server: {
@@ -15,22 +16,16 @@ export default defineConfig({
 
   build: {
     emptyOutDir: true,
-    manifest: true,
     minify: true,
-    polyfillModulePreload: false,
-    rollupOptions: {
-      output: {
-        chunkFileNames: 'chunk-[name].[hash].js',
-        entryFileNames: 'entry-[name].[hash].js',
-        inlineDynamicImports: false,
-        sourcemap: false,
-      },
-    },
     sourcemap: false,
+    chunkSizeWarningLimit: 700,
+    rollupOptions: {
+      treeshake: 'safest',
+    },
   },
 
   plugins: [
-    nodePolyfills(),
+    splitVendorChunkPlugin(),
     tsconfigPaths(),
     react({
       babel: {
@@ -44,6 +39,10 @@ export default defineConfig({
           ['@babel/plugin-transform-react-jsx', { pragma: '__cssprop' }, 'twin.macro'],
         ],
       },
+    }),
+    compression({
+      include: [/\.js$/, /\.css$/],
+      threshold: 1400,
     }),
   ],
 });
