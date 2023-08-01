@@ -28,7 +28,6 @@ export const Input = ({ status, value, handleChange }: Props) => {
           placeholder="가격을 입력해주세요."
           onChange={handleChange}
           value={value}
-          maxLength={13}
         />
       </Container>
       {status === 'error' && (
@@ -42,11 +41,11 @@ export const Input = ({ status, value, handleChange }: Props) => {
   );
 };
 const Wrapper = tw.div`
-  flex flex-col gap-8
+  flex flex-col gap-8 
 `;
 
 const Container = styled.div<Props>(({ status }) => [
-  tw`flex items-center h-64 gap-8 p-16 border-solid rounded-8 border-1 border-gray3 text-gray6`,
+  tw`flex items-center h-64 gap-8 p-16 border-solid rounded-8 border-1 border-gray3 text-gray6 `,
   status === 'normal' &&
     css`
       color: ${COLOR.RED};
@@ -56,7 +55,7 @@ const Container = styled.div<Props>(({ status }) => [
 ]);
 
 const BaseInput = styled.input<Props>(() => [
-  tw`bg-transparent border-none font-sb-20`,
+  tw`bg-transparent border-none font-sb-20 w-268`,
   css`
     &::placeholder {
       font-family: Pretendard Variable;
