@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { compression } from 'vite-plugin-compression2';
 import { splitVendorChunkPlugin } from 'vite';
 
@@ -25,6 +26,7 @@ export default defineConfig({
   },
 
   plugins: [
+    nodePolyfills(),
     splitVendorChunkPlugin(),
     tsconfigPaths(),
     react({

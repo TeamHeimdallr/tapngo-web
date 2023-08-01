@@ -1,4 +1,4 @@
-import loadable, { lazy } from '@loadable/component';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import tw from 'twin.macro';
 
@@ -10,29 +10,31 @@ const Pay = lazy(() => import('./pages/pay'));
 const Payment = lazy(() => import('./pages/pay/payment'));
 const Ticket = lazy(() => import('./pages/ticket'));
 const Ticketing = lazy(() => import('./pages/ticket/ticketing'));
-const Landing = loadable(() => import('./pages/landing'));
+const Landing = lazy(() => import('./pages/landing'));
 const Provider = lazy(() => import('~/hocs/hoc-provider'));
 
 const RouteWrapper = tw.main`relative w-full h-full`;
 const App = () => {
   return (
     <BrowserRouter>
-      <Provider>
-        <RouteWrapper>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/pay" element={<Pay />} />
-            <Route path="/pay/:price" element={<Payment />} />
-            <Route path="/mint" element={<Mint />} />
-            <Route path="/mint/:id" element={<Minting />} />
-            <Route path="/ticket" element={<Ticket />} />
-            <Route path="/ticket/:id" element={<Ticketing />} />
-            <Route path="/my" element={<My />} />
-            <Route path="/my/card" element={<Card />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </RouteWrapper>
-      </Provider>
+      <Suspense>
+        <Provider>
+          <RouteWrapper>
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/pay" element={<Pay />} />
+              <Route path="/pay/:price" element={<Payment />} />
+              <Route path="/mint" element={<Mint />} />
+              <Route path="/mint/:id" element={<Minting />} />
+              <Route path="/ticket" element={<Ticket />} />
+              <Route path="/ticket/:id" element={<Ticketing />} />
+              <Route path="/my" element={<My />} />
+              <Route path="/my/card" element={<Card />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </RouteWrapper>
+        </Provider>
+      </Suspense>
     </BrowserRouter>
   );
 };
