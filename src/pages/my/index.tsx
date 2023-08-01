@@ -28,7 +28,7 @@ const MyPage = () => {
   const { data: assetTransfersData, mutateAsync: postAssetTransfers } =
     useAlchemyPostAssetTransfers();
 
-  const { data: nftsData } = useAlchemyGetNfts({ owner: cardData }, { enabled: false });
+  const { data: nftsData } = useAlchemyGetNfts({ owner: cardData }, { enabled: true });
   const ownedNfts = nftsData?.ownedNfts;
 
   const { data: maticData, mutateAsync: postGetTokenBalance } = useAlchemyPostGetTokenBalance();
