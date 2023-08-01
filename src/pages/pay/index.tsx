@@ -33,7 +33,7 @@ const PayPage = () => {
   }, [value]);
 
   const handleClick = () => {
-    navigate(`/pay/${value.replace(/,/g, '')}`);
+    navigate(`/admin/pay/${value.replace(/,/g, '')}`);
   };
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default PayPage;
 const Wrapper = tw.div`
   relative 
   w-360 h-full px-16 
-  overflow-hidden
+  overflow-x-hidden
 `;
 const Body = tw.div`
   pt-54 pb-16 flex flex-col h-full
