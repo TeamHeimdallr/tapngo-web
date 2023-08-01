@@ -22,6 +22,8 @@ export const Input = ({ status, value, handleChange }: Props) => {
           ₩
         </Text>
         <BaseInput
+          type="number"
+          inputMode="numeric"
           status={status}
           placeholder="가격을 입력해주세요."
           onChange={handleChange}

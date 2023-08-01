@@ -24,9 +24,13 @@ const PayPage = () => {
       setStatus('error');
       return;
     } else if (value === '') setStatus('normal');
-    if (value !== '') setValue(parseNumberWithComma(+value));
+    if (value !== '') setValue(value);
     else if (value === '') setValue(value);
   };
+
+  useEffect(() => {
+    if (value === '') setStatus('normal');
+  }, [value]);
 
   const handleClick = () => {
     navigate(`/pay/${value.replace(/,/g, '')}`);
@@ -64,10 +68,11 @@ export default PayPage;
 const Wrapper = tw.div`
   relative 
   w-360 h-screen px-16 
+  overflow-hidden
 `;
 const Body = tw.div`
   pt-54 pb-16 flex flex-col h-screen
-  justify-between
+  justify-between 
 `;
 const TextWrapper = tw.div`
   flex flex-col gap-48 pt-24
