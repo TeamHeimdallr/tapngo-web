@@ -20,7 +20,7 @@ import { sha256Hash } from '~/utils/string';
 
 const URL = `https://mumbai.polygonscan.com/tx/`;
 
-export const Payment = () => {
+export const PaymentPage = () => {
   const navigate = useNavigate();
   const { price } = useParams();
   const [txhash, setTxhash] = useState('');
