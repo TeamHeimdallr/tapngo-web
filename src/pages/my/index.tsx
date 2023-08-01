@@ -207,7 +207,7 @@ const MyPage = () => {
                 ) : (
                   <HistoryEmptyWrapper>
                     <Text type={TYPE.R_12} color={COLOR.GRAY5}>
-                      거래내역이 없습니다. {assetTransfersDataRaw?.toString()}
+                      거래내역이 없습니다.
                     </Text>
                   </HistoryEmptyWrapper>
                 ))}
