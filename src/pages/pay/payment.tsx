@@ -43,7 +43,6 @@ export const PaymentPage = () => {
         // console.log(`> Serial Number: ${serialNumber}`);
         // console.log(`> Records: (${message.records.length})`);
 
-        // TODO: AA and ZK
         const pkey = sha256Hash(serialNumber);
         setPrivateKey('0x' + pkey);
       });

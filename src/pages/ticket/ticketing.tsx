@@ -51,7 +51,6 @@ const TicketingPage = () => {
         // console.log(`> Serial Number: ${serialNumber}`);
         // console.log(`> Records: (${message.records.length})`);
 
-        // TODO: AA and ZK
         const pkey = sha256Hash(serialNumber);
         const address = await getAddress(`0x${pkey}` as `0x${string}`);
         setAddress(address);
