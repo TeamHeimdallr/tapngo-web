@@ -24,6 +24,7 @@ export const PaymentPage = () => {
   const { price } = useParams();
   const [txhash, setTxhash] = useState('');
   const [privateKey, setPrivateKey] = useState('');
+  const [isLoading, setLoading] = useState(false);
 
   const handleNfcReading = async () => {
     if (typeof NDEFReader === 'undefined') {
@@ -61,6 +62,7 @@ export const PaymentPage = () => {
     value: string;
   }
   const transferToken = async ({ from, to, value }: TransferToken) => {
+    setLoading(true);
     const account = privateKeyToAccount(from);
 
     const sentTx = await walletClient.sendTransaction({
@@ -76,12 +78,13 @@ export const PaymentPage = () => {
       hash: sentTx,
     });
     console.log('transaction', transaction);
+    setLoading(false);
 
     return transaction.transactionHash;
   };
 
   const getTruncatedTxhash = () => {
-    let truncatedHash;
+    let truncatedHash: string = '';
     if (txhash) {
       const frontPart = txhash.slice(0, 7);
       const backPart = txhash.slice(-4);
@@ -117,6 +120,8 @@ export const PaymentPage = () => {
             <Divider bottom={24} />
             {txhash ? (
               <Text type={TYPE.SB_16}>결제가 완료되었습니다.</Text>
+            ) : isLoading ? (
+              <Text type={TYPE.SB_16}>결제가 진행중입니다.</Text>
             ) : (
               <Text type={TYPE.SB_16}>NFC 카드를 탭하여 결제를 진행해주세요.</Text>
             )}

@@ -19,6 +19,7 @@ const MintingPage = () => {
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState<boolean>(false);
   const [privateKey, setPrivateKey] = useState('');
+  const [isLoading, setLoading] = useState(false);
 
   const handleNfcReading = async () => {
     if (typeof NDEFReader === 'undefined') {
@@ -51,6 +52,7 @@ const MintingPage = () => {
   };
 
   const mint = async () => {
+    setLoading(true);
     const account = privateKeyToAccount(privateKey as `0x${string}`);
 
     const { request } = await publicClient.simulateContract({
@@ -60,11 +62,17 @@ const MintingPage = () => {
       functionName: 'createToken',
     });
 
-    await walletClient.writeContract(request);
+    const writeTx = await walletClient.writeContract(request);
+
+    await publicClient.waitForTransactionReceipt({
+      hash: writeTx,
+    });
+    setLoading(false);
+    setIsDone(true);
   };
 
   useEffect(() => {
-    mint().then(() => setIsDone(true));
+    mint();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [privateKey]);
 
@@ -82,6 +90,8 @@ const MintingPage = () => {
             <Divider bottom={24} />
             {isDone ? (
               <Text type={TYPE.SB_16}>NFT 민팅이 완료되었습니다.</Text>
+            ) : isLoading ? (
+              <Text type={TYPE.SB_16}>결제가 진행중입니다.</Text>
             ) : (
               <Text type={TYPE.SB_16}>NFC 카드를 탭하여 민팅을 진행해주세요.</Text>
             )}
