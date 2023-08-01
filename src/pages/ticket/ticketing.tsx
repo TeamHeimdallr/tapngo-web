@@ -147,7 +147,7 @@ interface Props {
 }
 
 const Wrapper = styled.div<Props>(({ isDone, isError }) => [
-  tw`relative h-screen px-16 w-360`,
+  tw`relative h-screen px-16 w-360 overflow-hidden`,
   isDone && !isError && tw`bg-green`,
   isDone && isError && tw`bg-red`,
 ]);
