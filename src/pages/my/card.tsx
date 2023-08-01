@@ -15,6 +15,7 @@ import { sha256Hash } from '~/utils/string';
 const CardPage = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
+  const [address, setAddress] = useState('0x');
 
   const handleNfcReading = async () => {
     if (typeof NDEFReader === 'undefined') {
@@ -42,6 +43,7 @@ const CardPage = () => {
         if (pkey) {
           const { address } = privateKeyToAccount(`0x${pkey}`);
           const auth = { account: address };
+          setAddress(address);
           localStorage.setItem('card', JSON.stringify(auth));
 
           setIsLogin(true);
@@ -69,8 +71,8 @@ const CardPage = () => {
                 <Text type={TYPE.SB_16}>카드 등록이 완료되었습니다.</Text>
                 <Divider bottom={40} />
                 <CardInfoContainer>
-                  <Text type={TYPE.R_12}>카드 시리얼</Text>
-                  <Text type={TYPE.SB_16}>00-00-00-00</Text>
+                  <Text type={TYPE.R_12}>지갑 주소</Text>
+                  <Text type={TYPE.SB_16}>{address}</Text>
                 </CardInfoContainer>
               </>
             ) : (
