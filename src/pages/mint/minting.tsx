@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
+import { privateKeyToAccount } from 'viem/accounts';
 
+import { NFT_ABI } from '~/abi/nft';
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
@@ -10,14 +12,64 @@ import { Gnb } from '~/components/gnb';
 import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
+import { publicClient, walletClient } from '~/configs/setup-contract';
+import { sha256Hash } from '~/utils/string';
 
 export const Minting = () => {
   const navigate = useNavigate();
-  const [isDone, _] = useState<boolean>(true);
+  const [isDone, setIsDone] = useState<boolean>(false);
+  const [privateKey, setPrivateKey] = useState('');
+
+  const handleNfcReading = async () => {
+    if (typeof NDEFReader === 'undefined') {
+      console.log('NFC is not supported in this browser.');
+      return;
+    }
+
+    try {
+      console.log('NFC Reading Start');
+      const ndef = new NDEFReader();
+      await ndef.scan();
+
+      ndef.addEventListener('readingerror', () => {
+        console.log('Argh! Cannot read data from the NFC tag. Try another one?');
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ndef.addEventListener('reading', (event: any) => {
+        const { _, serialNumber } = event;
+        // console.log(`> Serial Number: ${serialNumber}`);
+        // console.log(`> Records: (${message.records.length})`);
+
+        // TODO: AA and ZK
+        const pkey = sha256Hash(serialNumber);
+        setPrivateKey('0x' + pkey);
+      });
+    } catch (error) {
+      console.error('Error while scanning NFC:', error);
+    }
+  };
+
+  const mint = async () => {
+    const account = privateKeyToAccount(privateKey as `0x${string}`);
+
+    const { request } = await publicClient.simulateContract({
+      account,
+      address: '0x181a35eeb40ad002b8a331918e1d0efef569e8c8',
+      abi: NFT_ABI,
+      functionName: 'createToken',
+    });
+
+    await walletClient.writeContract(request);
+  };
 
   useEffect(() => {
-    // TODO : connect
-    // setIsDone()
+    mint().then(() => setIsDone(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [privateKey]);
+
+  useEffect(() => {
+    handleNfcReading();
   }, []);
 
   return (
@@ -58,8 +110,8 @@ export const Minting = () => {
 };
 
 const Wrapper = tw.div`
-  relative 
-  w-360 h-screen px-16 
+  relative
+  w-360 h-screen px-16
 `;
 const Body = tw.div`
   pt-54 pb-16 flex flex-col h-screen
