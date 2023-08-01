@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 
+import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
 import { Divider } from '~/components/divider';
@@ -27,7 +28,9 @@ export const Mint = () => {
               <Divider bottom={16} />
               <Text type={TYPE.SB_16}>해커톤 참가 요청</Text>
               <Divider bottom={4} />
-              <Text type={TYPE.R_12}>2023년 7월 31일</Text>
+              <Text type={TYPE.R_12} color={COLOR.GRAY5}>
+                2023년 7월 31일
+              </Text>
             </MintingWrapper>
           </Container>
           <ButtonFilled onClick={handleClick} width={328} text="민팅하기" primary={'large'} />

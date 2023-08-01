@@ -12,7 +12,7 @@ export default {
 
 const Template = () => {
   const [value, setValue] = useState<string>('');
-  const [status, setStatus] = useState<string>('');
+  const [status, setStatus] = useState<string>('normal');
   const debouncedValue = useDebounce<string>(value, 500, setStatus);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

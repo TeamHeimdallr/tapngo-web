@@ -13,7 +13,7 @@ import { Text } from '~/components/text';
 
 export const Ticket = () => {
   const navigate = useNavigate();
-  const [isDone, setIsDone] = useState(true);
+  const [isDone, setIsDone] = useState(false);
   const [isError, setIsError] = useState(false);
   return (
     <Layout>

@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import tw, { css, styled } from 'twin.macro';
+import tw, { styled } from 'twin.macro';
 
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';

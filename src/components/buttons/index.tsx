@@ -60,7 +60,7 @@ const Wrapper = styled.button<LoadingProps>(({ primary, isLoading, width, height
   `,
   primary === 'large' && tw`py-16 px-24 h-56`,
   primary === 'medium' && tw`py-9 px-20 h-38`,
-  isLoading && tw`text-transparent non-clickable bg-gray2`,
+  isLoading && tw`text-transparent non-clickable bg-gray2 hover:(bg-gray2)`,
 ]);
 
 const TextWrapper = styled.div<LoadingProps>(({ isLoading, disabled }) => [

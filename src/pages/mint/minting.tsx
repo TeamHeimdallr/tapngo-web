@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 
+import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
 import { Divider } from '~/components/divider';
@@ -10,6 +12,7 @@ import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 
 export const Minting = () => {
+  const navigate = useNavigate();
   const [isDone, _] = useState<boolean>(true);
 
   useEffect(() => {
@@ -35,11 +38,19 @@ export const Minting = () => {
               <Image src="/poap.png" />
               <TextContainer>
                 <Text type={TYPE.SB_16}>SWF 2023 해커톤 참가</Text>
-                <Text type={TYPE.R_12}>2023년 7월 31일</Text>
+                <Text type={TYPE.R_12} color={COLOR.GRAY5}>
+                  2023년 7월 31일
+                </Text>
               </TextContainer>
             </MintingWrapper>
           </Container>
-          <ButtonFilled isLoading={!isDone} width={328} text="확인" primary={'large'} />
+          <ButtonFilled
+            isLoading={!isDone}
+            width={328}
+            text="확인"
+            primary={'large'}
+            onClick={() => navigate('/')}
+          />
         </Body>
       </Wrapper>
     </Layout>
@@ -63,7 +74,8 @@ const MintingWrapper = tw.div`
   flex gap-16 rounded-8
 `;
 const TextContainer = tw.div`
-  w-full h-full flex-col flex-center
+  w-full h-full flex flex-col items-start justify-center
+  gap-4
 `;
 const Image = tw.img`
   w-80 h-80
