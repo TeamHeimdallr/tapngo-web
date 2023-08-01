@@ -69,6 +69,3 @@ const Body = tw.div`
 const TextWrapper = tw.div`
   flex flex-col gap-48 pt-24
 `;
-const LoadingContainer = tw.div`
-  pt-54 flex flex-col flex-center
-`;

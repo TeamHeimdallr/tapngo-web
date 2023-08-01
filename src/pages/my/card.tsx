@@ -12,7 +12,7 @@ import { Text } from '~/components/text';
 
 export const Card = () => {
   const navigate = useNavigate();
-  const [isDone, setIsLoading] = useState(true);
+  const [isDone, _] = useState(true);
   return (
     <Layout>
       <Wrapper>
