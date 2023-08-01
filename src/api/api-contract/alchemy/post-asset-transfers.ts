@@ -15,12 +15,12 @@ import { alchemyApi } from '..';
 export const useAlchemyPostAssetTransfers = (options?: UseAlchemyPostAssetTransfers) =>
   useMutation<Transfers[], AxiosError<Transfers[], GetAssetTransfers>, GetAssetTransfers>(
     ['alchemy', 'post', 'asset-transfers'],
-    getAssetTransfers,
+    assetTransfersAxios,
     { ...options }
   );
 
-const getAssetTransfers = async ({ walletAddress }: GetAssetTransfers) => {
-  const getReceiveTransfers = async () =>
+const assetTransfersAxios = async ({ walletAddress }: GetAssetTransfers) => {
+  const postReceiveTransfers = async () =>
     (
       await alchemyApi.post<
         GetAssetTransfersResponse,
@@ -39,7 +39,7 @@ const getAssetTransfers = async ({ walletAddress }: GetAssetTransfers) => {
       })
     ).data;
 
-  const getSentTransfers = async () =>
+  const postSentTransfers = async () =>
     (
       await alchemyApi.post<
         GetAssetTransfersResponse,
@@ -58,7 +58,7 @@ const getAssetTransfers = async ({ walletAddress }: GetAssetTransfers) => {
       })
     ).data;
 
-  const [receive, send] = await Promise.all([getReceiveTransfers(), getSentTransfers()]);
+  const [receive, send] = await Promise.all([postReceiveTransfers(), postSentTransfers()]);
 
   const allsortedTransfer = [...receive.result.transfers, ...send.result.transfers].sort(
     (a, b) => Number(b.blockNum) - Number(a.blockNum)

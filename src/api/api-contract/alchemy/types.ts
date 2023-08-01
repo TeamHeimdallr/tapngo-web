@@ -7,7 +7,7 @@ import { AxiosError } from 'axios';
 export type Category = 'external' | 'internal' | 'erc20' | 'erc721' | 'erc1155' | 'specialnft';
 
 /**
- * Get Asset Transfers
+ * Post Asset Transfers
  */
 
 /**
@@ -84,3 +84,77 @@ export type UseAlchemyPostAssetTransfers = UseMutationOptions<
   AxiosError<Transfers[], GetAssetTransfers>,
   GetAssetTransfers
 >;
+
+/**
+ * Get NFTs
+ */
+
+/**
+ * request
+ */
+export interface GetNftsRequest {
+  owner: string;
+  'contractAddresses[]'?: `0x${string}`[];
+}
+
+/**
+ * response
+ */
+export interface NftContract {
+  address: string;
+}
+export interface NftId {
+  tokenId: string;
+  toekeMetadata: {
+    tokenType: string;
+  };
+}
+export interface TokenUrl {
+  gateway: string;
+  raw: string;
+}
+export interface TokenMedia {
+  gateway: string;
+  thumbnail: string;
+  raw: string;
+  format: string;
+  bytes: number;
+}
+export interface TokenMetadata {
+  name: string;
+  image: string;
+  description: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  attributes: any[];
+}
+
+export interface ContractMetadata {
+  name: string;
+  symbol: string;
+  totalSupply: string;
+  tokenType: string;
+  contractDeployer: string;
+  deployedBlockNumber: number;
+  openSea: {
+    lastIngestedAt: string;
+  };
+}
+
+export interface OwnerNft {
+  contract: NftContract;
+  id: NftId;
+  balance: string;
+  title: string;
+  description: string;
+  tokenUri: TokenUrl;
+  media: TokenMedia[];
+  metadata: TokenMetadata;
+  timeLastUpdated: string; // data string
+  contractMetadata: ContractMetadata;
+}
+
+export interface GetNftsResponse {
+  ownedNfts: OwnerNft[];
+  totalCount: number;
+  blockHash: string;
+}

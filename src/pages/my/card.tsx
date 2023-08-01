@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 
-import { useAlchemyPostAssetTransfers } from '~/api/api-contract/alchemy/get-asset-transfers';
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
 import { Divider } from '~/components/divider';
@@ -15,13 +14,6 @@ const CardPage = () => {
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState(false);
   const [cardData, setCardData] = useState('');
-
-  const { data, mutateAsync } = useAlchemyPostAssetTransfers();
-  console.log(data);
-
-  useEffect(() => {
-    mutateAsync({ walletAddress: '0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258' });
-  }, []);
 
   useEffect(() => {
     // if nfc event trigger
