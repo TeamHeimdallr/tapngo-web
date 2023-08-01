@@ -193,7 +193,7 @@ export interface GetOwnersForCollectionRequest {
  * response
  */
 export interface GetOwnersForCollectionResponse {
-  owners: `0x${string}`[];
+  ownerAddresses: `0x${string}`[];
 }
 
 /**
