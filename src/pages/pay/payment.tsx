@@ -17,10 +17,12 @@ import { publicClient, walletClient } from '~/configs/setup-contract';
 import { parseNumberWithComma } from '~/utils/number';
 import { sha256Hash } from '~/utils/string';
 
+const URL = `https://mumbai.polygonscan.com/tx/`;
+
 export const Payment = () => {
   const navigate = useNavigate();
   const { price } = useParams();
-  const [isDone, setIsDone] = useState<boolean>(false);
+  const [txhash, setTxhash] = useState('');
   const [privateKey, setPrivateKey] = useState('');
 
   const handleNfcReading = async () => {
@@ -78,12 +80,22 @@ export const Payment = () => {
     return transaction.transactionHash;
   };
 
+  const getTruncatedTxhash = () => {
+    let truncatedHash;
+    if (txhash) {
+      const frontPart = txhash.slice(0, 7);
+      const backPart = txhash.slice(-4);
+      truncatedHash = `${frontPart}...${backPart}`;
+    }
+    return truncatedHash;
+  };
+
   useEffect(() => {
     transferToken({
       from: privateKey as `0x${string}`,
       to: '0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258',
       value: (Math.floor((10000 * Number(price)) / 2340000) / 10000).toString(),
-    }).then(() => setIsDone(true));
+    }).then(setTxhash);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [privateKey]);
 
@@ -91,15 +103,19 @@ export const Payment = () => {
     handleNfcReading();
   }, []);
 
+  const handleOpenHashWindow = () => {
+    window.open(`${URL}${txhash}`);
+  };
+
   return (
     <Layout>
       <Wrapper>
         <Gnb landing />
         <Body>
           <Container>
-            {isDone ? <IconChecked width={80} height={80} /> : <IconPayed width={80} height={80} />}
+            {txhash ? <IconChecked width={80} height={80} /> : <IconPayed width={80} height={80} />}
             <Divider bottom={24} />
-            {isDone ? (
+            {txhash ? (
               <Text type={TYPE.SB_16}>결제가 완료되었습니다.</Text>
             ) : (
               <Text type={TYPE.SB_16}>NFC 카드를 탭하여 결제를 진행해주세요.</Text>
@@ -115,9 +131,26 @@ export const Payment = () => {
             <Text type={TYPE.R_14} color={COLOR.GRAY6}>
               ${Math.floor((10000 * Number(price)) / 2340000) / 10000} ETH
             </Text>
+            {txhash && (
+              <>
+                <Divider bottom={24} />
+                <TxhashWrapper onClick={handleOpenHashWindow}>
+                  <TxhashContainer>
+                    <Text type={TYPE.R_12} color={COLOR.GRAY5}>
+                      Tx Hash
+                    </Text>
+                    <Txhash>
+                      <Text type={TYPE.R_12} color={COLOR.GRAY7}>
+                        {getTruncatedTxhash()}
+                      </Text>
+                    </Txhash>
+                  </TxhashContainer>
+                </TxhashWrapper>
+              </>
+            )}
           </Container>
           <ButtonFilled
-            isLoading={!isDone}
+            isLoading={!txhash}
             width={328}
             text="확인"
             primary={'large'}
@@ -140,4 +173,15 @@ const Body = tw.div`
 const Container = tw.div`
   flex flex-col pt-100
   items-center
+`;
+const TxhashWrapper = tw.div`
+  w-200 py-6 px-16 flex flex-center
+  rounded-8 bg-gray1
+  clickable
+`;
+const TxhashContainer = tw.div`
+  flex gap-24
+`;
+const Txhash = tw.div`
+  underline
 `;
