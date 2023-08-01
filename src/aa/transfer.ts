@@ -22,10 +22,11 @@ export default async function transfer(pkey: string, t: string, amt: string) {
     onBuild: op => console.log('Signed UserOperation:', op),
   });
   console.log(`UserOpHash: ${res.userOpHash}`);
+  return res.userOpHash ?? null;
 
-  console.log('Waiting for transaction...');
-  const ev = await res.wait();
-  console.log(`Transaction hash: ${ev?.transactionHash ?? null}`);
+  // console.log('Waiting for transaction...');
+  // const ev = await res.wait();
+  // console.log(`Transaction hash: ${ev?.transactionHash ?? null}`);
 
-  return ev?.transactionHash ?? null;
+  // return ev?.transactionHash ?? null;
 }

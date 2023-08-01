@@ -9,7 +9,6 @@ import { Input } from '~/components/input';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 import { useDebounce } from '~/hooks/data/use-debounce';
-import { parseNumberWithComma } from '~/utils/number';
 
 const PayPage = () => {
   const navigate = useNavigate();
@@ -66,13 +65,13 @@ const PayPage = () => {
 export default PayPage;
 
 const Wrapper = tw.div`
-  relative 
-  w-360 h-full px-16 
+  relative
+  w-360 h-full px-16
   overflow-x-hidden
 `;
 const Body = tw.div`
   pt-54 pb-16 flex flex-col h-full
-  justify-between 
+  justify-between
 `;
 const TextWrapper = tw.div`
   flex flex-col gap-48 pt-24
