@@ -158,3 +158,22 @@ export interface GetNftsResponse {
   totalCount: number;
   blockHash: string;
 }
+
+/**
+ * Get owners for token
+ */
+
+/**
+ * request
+ */
+export interface GetOwnersForTokenRequest {
+  contractAddress: `0x${string}`;
+  tokenId: string;
+}
+
+/**
+ * response
+ */
+export interface GetOwnersForTokenResponse {
+  owners: `0x${string}`[];
+}

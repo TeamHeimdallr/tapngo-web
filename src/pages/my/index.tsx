@@ -23,10 +23,7 @@ const MyPage = () => {
     useAlchemyPostAssetTransfers();
 
   // TODO: 데이터 가공 후 화면에 보여주기
-  const { data: nftsData } = useAlchemyGetNfts(
-    { owner: '0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258' },
-    { enabled: false }
-  );
+  const { data: nftsData } = useAlchemyGetNfts({ owner: '' }, { enabled: false });
 
   const handleClickAdd = () => {
     navigate('/my/card');

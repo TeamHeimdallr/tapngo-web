@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 
+import { useAlchemyGetOwnersForToken } from '~/api/api-contract/alchemy/get-owners-for-token';
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
@@ -15,6 +16,12 @@ const TicketingPage = () => {
   const navigate = useNavigate();
   const [isDone] = useState<boolean>(true);
   const [isError] = useState<boolean>(true);
+
+  // TODO: 데이터 가공 후 화면에 보여주기
+  const { data: nftOwner } = useAlchemyGetOwnersForToken({
+    contractAddress: '0x',
+    tokenId: '',
+  });
 
   useEffect(() => {
     // TODO : connect
