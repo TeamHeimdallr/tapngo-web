@@ -9,7 +9,11 @@ import {
   TokenBalance,
   UseAlchemyPostGetTokenBalance,
 } from '~/api/api-contract/alchemy/types';
-import { ALCHEMY_POLYGON_MUMBAI_API_KEY, CONTRACT_ADDRESS } from '~/constants';
+import {
+  ALCHEMY_POLYGON_MUMBAI_API_KEY,
+  CONTRACT_ADDRESS,
+  FORMAT_NUMBER_THRESHOLD,
+} from '~/constants';
 import { parseFloat, parseNumberWithComma, parseNumberWithUnit } from '~/utils/number';
 
 import { alchemyApi } from '..';
@@ -49,7 +53,7 @@ const postGetTokenBalance = async ({ walletAddress }: PostGetTokenBalance) => {
 
   const formattedNumber = Number(parseFloat(Number(balance || 0), 4));
   const formattedWithUnit =
-    formattedNumber > 100000
+    formattedNumber > FORMAT_NUMBER_THRESHOLD
       ? parseNumberWithUnit(formattedNumber)
       : parseNumberWithComma(formattedNumber);
 
