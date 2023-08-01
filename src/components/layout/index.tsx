@@ -9,5 +9,5 @@ export const Layout = ({ children }: Props) => {
   return <Wrapper>{children}</Wrapper>;
 };
 const Wrapper = tw.div`
-  w-full flex justify-center
+  w-full h-full flex justify-center
 `;

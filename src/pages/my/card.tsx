@@ -100,10 +100,11 @@ export default CardPage;
 
 const Wrapper = tw.div`
   relative
-  w-360 h-screen px-16
+  w-360 h-full px-16
+  overflow-hidden
 `;
 const Body = tw.div`
-  pt-54 pb-16 flex flex-col h-screen
+  pt-54 pb-16 flex flex-col h-full
   justify-between
 `;
 const Container = tw.div`
