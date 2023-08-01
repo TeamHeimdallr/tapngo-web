@@ -78,6 +78,11 @@ const MyPage = () => {
     }
   }, []);
 
+  const handleSwap = e => {
+    e.stopPropagation();
+    navigate('/admin');
+  };
+
   useEffect(() => {
     if (!cardData) return;
     postAssetTransfers({ walletAddress: cardData as `0x${string}` });
@@ -93,7 +98,7 @@ const MyPage = () => {
             <TitleContainer>
               <Text type={TYPE.SB_24}>내 지갑</Text>
               <IconContainer onClick={handleLogout}>
-                <IconSwap onClick={() => navigate('/admin')} />
+                <IconSwap onClick={handleSwap} />
                 <IconLogout />
               </IconContainer>
             </TitleContainer>
