@@ -97,7 +97,7 @@ export const PaymentPage = () => {
     transferToken({
       from: privateKey as `0x${string}`,
       to: '0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258',
-      value: (Math.floor((10000 * Number(price)) / 2340000) / 10000).toString(),
+      value: (Math.floor((10000 * Number(price)) / MATIC_PRICE.WON) / 10000).toString(),
     }).then(setTxhash);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [privateKey]);
