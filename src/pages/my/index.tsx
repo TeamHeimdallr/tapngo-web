@@ -107,65 +107,81 @@ const MyPage = () => {
             <Divider bottom={24} />
             <CardWrapper>
               {isHistory &&
-                assetTransfersData &&
-                assetTransfersData.map(({ uniqueId, metadata, value, asset, from, hash }) => {
-                  const time = format(
-                    new Date(metadata.blockTimestamp || 0),
-                    DATE_FORMATTER.yyyy_MM_dd_HH_mm_ss
-                  );
-                  const sent = from === cardData;
-                  const unit = sent ? '-' : '+';
+                (assetTransfersData && assetTransfersData.length > 0 ? (
+                  assetTransfersData.map(({ uniqueId, metadata, value, asset, from, hash }) => {
+                    const time = format(
+                      new Date(metadata.blockTimestamp || 0),
+                      DATE_FORMATTER.yyyy_MM_dd_HH_mm_ss
+                    );
+                    const sent = from === cardData;
+                    const unit = sent ? '-' : '+';
 
-                  const handleOpenHashWindow = () => {
-                    window.open(`${MUMBAI_SCANNER_URL}/tx/${hash}`);
-                  };
+                    const handleOpenHashWindow = () => {
+                      window.open(`${MUMBAI_SCANNER_URL}/tx/${hash}`);
+                    };
 
-                  return (
-                    <HistoryCardWrapper key={uniqueId}>
-                      <HistoryCardContainer>
-                        <Row_1>
-                          <Text type={TYPE.R_12} color={COLOR.GRAY5}>
-                            {time}
-                          </Text>
-                        </Row_1>
-                        <Row_2>
-                          <Text type={TYPE.R_14} onClick={handleOpenHashWindow}>
-                            {truncateAddress(hash as `0x${string}`)}
-                          </Text>
-                          <Text type={TYPE.SB_14}>
-                            {`${unit} ${parseNumberWithComma(MATIC_PRICE.WON * Number(value))} 원`}
-                          </Text>
-                        </Row_2>
-                        <Row_3>
-                          <Text type={TYPE.R_12} color={COLOR.GRAY6}>
-                            {`${value} ${asset}`}
-                          </Text>
-                        </Row_3>
-                      </HistoryCardContainer>
-                    </HistoryCardWrapper>
-                  );
-                })}
+                    return (
+                      <HistoryCardWrapper key={uniqueId}>
+                        <HistoryCardContainer>
+                          <Row_1>
+                            <Text type={TYPE.R_12} color={COLOR.GRAY5}>
+                              {time}
+                            </Text>
+                          </Row_1>
+                          <Row_2>
+                            <Text type={TYPE.R_14} onClick={handleOpenHashWindow}>
+                              {truncateAddress(hash as `0x${string}`)}
+                            </Text>
+                            <Text type={TYPE.SB_14}>
+                              {`${unit} ${parseNumberWithComma(
+                                MATIC_PRICE.WON * Number(value)
+                              )} 원`}
+                            </Text>
+                          </Row_2>
+                          <Row_3>
+                            <Text type={TYPE.R_12} color={COLOR.GRAY6}>
+                              {`${value} ${asset}`}
+                            </Text>
+                          </Row_3>
+                        </HistoryCardContainer>
+                      </HistoryCardWrapper>
+                    );
+                  })
+                ) : (
+                  <HistoryEmptyWrapper>
+                    <Text type={TYPE.R_12} color={COLOR.GRAY5}>
+                      거래내역이 없습니다.
+                    </Text>
+                  </HistoryEmptyWrapper>
+                ))}
             </CardWrapper>
-            <NftWrapper>
+            <NftWrapper empty={!ownedNfts || ownedNfts?.length === 0}>
               {isNft &&
-                ownedNfts &&
-                ownedNfts.map(({ contract, id, title, media, timeLastUpdated }) => {
-                  const { address } = contract;
-                  const { tokenId } = id;
-                  const { gateway } = media[0];
+                (ownedNfts && ownedNfts.length > 0 ? (
+                  ownedNfts.map(({ contract, id, title, media, timeLastUpdated }) => {
+                    const { address } = contract;
+                    const { tokenId } = id;
+                    const { gateway } = media[0];
 
-                  return (
-                    <NftContainer key={`${address}-${tokenId}`}>
-                      <Image src={`${gateway}`} />
-                      <TextContainer>
-                        <Text type={TYPE.SB_14}>{title}</Text>
-                        <Text type={TYPE.R_12} color={COLOR.GRAY5}>
-                          {format(new Date(timeLastUpdated), DATE_FORMATTER.yyyy_MM_dd)}
-                        </Text>
-                      </TextContainer>
-                    </NftContainer>
-                  );
-                })}
+                    return (
+                      <NftContainer key={`${address}-${tokenId}`}>
+                        <Image src={`${gateway}`} />
+                        <TextContainer>
+                          <Text type={TYPE.SB_14}>{title}</Text>
+                          <Text type={TYPE.R_12} color={COLOR.GRAY5}>
+                            {format(new Date(timeLastUpdated), DATE_FORMATTER.yyyy_MM_dd)}
+                          </Text>
+                        </TextContainer>
+                      </NftContainer>
+                    );
+                  })
+                ) : (
+                  <NftEmptyWrapper>
+                    <Text type={TYPE.R_12} color={COLOR.GRAY5}>
+                      NFT가 없습니다.
+                    </Text>
+                  </NftEmptyWrapper>
+                ))}
             </NftWrapper>
           </HistoryWrapper>
         ) : (
@@ -242,9 +258,13 @@ const Row_3 = tw.div`
   flex justify-end
 `;
 
-const NftWrapper = tw.div`
-  grid grid-cols-2 gap-16
-`;
+interface NftWrapper {
+  empty?: boolean;
+}
+const NftWrapper = styled.div<NftWrapper>(({ empty }) => [
+  tw`grid grid-cols-2 gap-16`,
+  empty && tw`flex justify-center py-20`,
+]);
 const NftContainer = tw.div`
   flex flex-col gap-12
 `;
@@ -259,4 +279,12 @@ const TitleContainer = tw.div`
 `;
 const IconContainer = tw.div`
   clickable
+`;
+
+const HistoryEmptyWrapper = tw.div`
+  flex justify-center py-20
+`;
+
+const NftEmptyWrapper = tw.div`
+  flex justify-center
 `;
