@@ -50,7 +50,10 @@ const MyPage = () => {
 
   useEffect(() => {
     const auth = localStorage.getItem('card');
-    if (auth) setCardData(auth);
+    if (auth) {
+      const { account } = JSON.parse(auth);
+      setCardData(account);
+    }
   }, []);
 
   return (
