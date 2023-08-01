@@ -15,6 +15,7 @@ import { sha256Hash } from '~/utils/string';
 const CardPage = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
+  const [sn, serSn] = useState('00:00:00:00');
 
   const handleNfcReading = async () => {
     if (typeof NDEFReader === 'undefined') {
@@ -37,6 +38,7 @@ const CardPage = () => {
         // console.log(`> Serial Number: ${serialNumber}`);
         // console.log(`> Records: (${message.records.length})`);
 
+        serSn(serialNumber);
         // TODO: AA and ZK
         const pkey = sha256Hash(serialNumber);
         if (pkey) {
@@ -70,7 +72,7 @@ const CardPage = () => {
                 <Divider bottom={40} />
                 <CardInfoContainer>
                   <Text type={TYPE.R_12}>카드 시리얼</Text>
-                  <Text type={TYPE.SB_16}>00-00-00-00</Text>
+                  <Text type={TYPE.SB_16}>{sn}</Text>
                 </CardInfoContainer>
               </>
             ) : (
