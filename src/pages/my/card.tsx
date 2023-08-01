@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 
@@ -12,7 +12,18 @@ import { Text } from '~/components/text';
 
 export const Card = () => {
   const navigate = useNavigate();
-  const [isDone, _] = useState(true);
+  const [isDone, setIsDone] = useState(false);
+  const [cardData, setCardData] = useState('');
+
+  useEffect(() => {
+    // if nfc event trigger
+    const cardData = '01:4f:d8:24';
+    if (cardData) {
+      localStorage.setItem('card', cardData);
+      setIsDone(true);
+    }
+  }, []);
+
   return (
     <Layout>
       <Wrapper>
