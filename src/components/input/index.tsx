@@ -44,11 +44,7 @@ const Wrapper = tw.div`
 `;
 
 const Container = styled.div<Props>(({ status }) => [
-  tw`
-  p-16 h-64 flex gap-8
-  items-center rounded-8
-  border-1 border-solid border-gray3 text-gray6
-`,
+  tw`flex items-center h-64 gap-8 p-16 border-solid rounded-8 border-1 border-gray3 text-gray6`,
   status === 'normal' &&
     css`
       color: ${COLOR.RED};
@@ -58,16 +54,15 @@ const Container = styled.div<Props>(({ status }) => [
 ]);
 
 const BaseInput = styled.input<Props>(() => [
-  tw`
-    font-sb-20 border-none bg-transparent
-  `,
+  tw`bg-transparent border-none font-sb-20`,
   css`
     &::placeholder {
       font-family: Pretendard Variable;
       font-size: 20px;
       font-style: normal;
-      font-weight: 600;
+      font-weight: 500;
       line-height: 28px; /* 133.333% */
+      color: #adb3be;
     }
   `,
 ]);

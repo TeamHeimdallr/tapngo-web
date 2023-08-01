@@ -52,7 +52,6 @@ const MintingPage = () => {
   };
 
   const mint = async () => {
-    setLoading(true);
     const account = privateKeyToAccount(privateKey as `0x${string}`);
 
     const { request } = await publicClient.simulateContract({
@@ -64,6 +63,7 @@ const MintingPage = () => {
 
     const writeTx = await walletClient.writeContract(request);
 
+    setLoading(true);
     await publicClient.waitForTransactionReceipt({
       hash: writeTx,
     });

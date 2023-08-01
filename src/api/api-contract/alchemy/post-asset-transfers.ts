@@ -54,6 +54,7 @@ const assetTransfersAxios = async ({ walletAddress }: GetAssetTransfers) => {
           {
             category: ['external'],
             fromAddress: walletAddress,
+            withMetadata: true,
           },
         ],
       })
