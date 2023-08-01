@@ -8,23 +8,22 @@ import { Gnb } from '~/components/gnb';
 import { Input } from '~/components/input';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
-import { useDebounce } from '~/hooks/data/use-debounce';
 
 const PayPage = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState<string>('');
   const [status, setStatus] = useState<string>('');
-  const debouncedValue = useDebounce<string>(value, 500, setStatus);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.trim().replace(/,/g, '');
-    const regex = /^\d+$/;
-    if (value !== '' && !regex.test(value)) {
-      setStatus('error');
-      return;
-    } else if (value === '') setStatus('normal');
-    if (value !== '') setValue(value);
-    else if (value === '') setValue(value);
+    const value = event.target.value.trim();
+
+    if (value !== '') {
+      setValue(value);
+      setStatus('type');
+    } else if (value === '') {
+      setStatus('normal');
+      setValue(value);
+    }
   };
 
   useEffect(() => {
@@ -34,11 +33,6 @@ const PayPage = () => {
   const handleClick = () => {
     navigate(`/admin/pay/${value.replace(/,/g, '')}`);
   };
-
-  useEffect(() => {
-    if (debouncedValue && status !== 'error') setStatus('done');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedValue]);
 
   return (
     <Layout>
@@ -50,7 +44,7 @@ const PayPage = () => {
             <Input status={status} value={value} handleChange={handleChange} />
           </TextWrapper>
           <ButtonFilled
-            disabled={status !== 'done' || value === '0'}
+            disabled={value === ''}
             onClick={handleClick}
             width={328}
             text="요청하기"
