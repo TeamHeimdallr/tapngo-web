@@ -4,7 +4,7 @@ interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'color'> {
   color?: string;
 }
 
-export const IconPayment = ({ color, ...rest }: IconProps) => (
+export const IconPay = ({ color, ...rest }: IconProps) => (
   <svg
     width="24"
     height="24"
@@ -26,6 +26,31 @@ export const IconPayment = ({ color, ...rest }: IconProps) => (
     </defs>
   </svg>
 );
+
+export const IconPayed = ({ color, ...rest }: IconProps) => (
+  <svg
+    width="81"
+    height="80"
+    viewBox="0 0 81 80"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...rest}
+  >
+    <rect x="0.5" width="80" height="80" rx="40" fill="#F4F5F7" />
+    <g clipPath="url(#clip0_1_311)">
+      <path
+        d="M51.1666 29.3333H29.8333C28.3533 29.3333 27.18 30.52 27.18 32L27.1666 48C27.1666 49.48 28.3533 50.6667 29.8333 50.6667H51.1666C52.6466 50.6667 53.8333 49.48 53.8333 48V32C53.8333 30.52 52.6466 29.3333 51.1666 29.3333ZM51.1666 48H29.8333V40H51.1666V48ZM51.1666 34.6667H29.8333V32H51.1666V34.6667Z"
+        fill={color ?? '#ADB3BE'}
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_1_311">
+        <rect width="32" height="32" fill="white" transform="translate(24.5 24)" />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
 export const IconPlus = ({ color, ...rest }: IconProps) => (
   <svg
     width="24"
@@ -132,7 +157,7 @@ export const IconChecked = ({ color, ...rest }: IconProps) => (
       fillRule="evenodd"
       clipRule="evenodd"
       d="M9.57013 16.9198C9.8289 17.0906 10.1806 17.0622 10.4084 16.8344L17.9508 9.29188C18.2112 9.03153 18.2112 8.60942 17.9508 8.34907C17.6905 8.08872 17.2684 8.08872 17.008 8.34907L9.93696 15.4201L7.10853 12.5917C6.84818 12.3314 6.42607 12.3314 6.16572 12.5917C5.90537 12.8521 5.90537 13.2742 6.16572 13.5345L9.46507 16.8339C9.46523 16.834 9.46539 16.8342 9.46555 16.8344C9.4981 16.8669 9.53317 16.8954 9.57013 16.9198Z"
-      fill="white"
+      fill={color ?? 'white'}
     />
   </svg>
 );

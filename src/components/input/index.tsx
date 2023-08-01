@@ -1,5 +1,6 @@
 import tw, { css, styled } from 'twin.macro';
 
+import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 
 import { Text } from '../text';
@@ -14,7 +15,12 @@ export const Input = ({ status, value, handleChange }: Props) => {
   return (
     <Wrapper>
       <Container status={status}>
-        <Text type={TYPE.SB_20}>₩</Text>
+        <Text
+          type={TYPE.SB_20}
+          color={status === '' || status === 'normal' ? COLOR.GRAY4 : COLOR.BLACK}
+        >
+          ₩
+        </Text>
         <BaseInput
           status={status}
           placeholder="가격을 입력해주세요."
@@ -41,7 +47,10 @@ const Container = styled.div<Props>(({ status }) => [
   items-center rounded-8
   border-1 border-solid border-gray3 text-gray6
 `,
-  status === 'normal' && tw`text-gray4`,
+  status === 'normal' &&
+    css`
+      color: ${COLOR.RED};
+    `,
   status === 'error' && tw`border-red bg-red/10`,
   status === 'type' && tw`border-darkGreen`,
 ]);
