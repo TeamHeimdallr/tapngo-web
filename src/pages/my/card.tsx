@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
+import { privateKeyToAccount } from 'viem/accounts';
 
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
@@ -9,19 +10,48 @@ import { Gnb } from '~/components/gnb';
 import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
+import { sha256Hash } from '~/utils/string';
 
 const CardPage = () => {
   const navigate = useNavigate();
-  const [isDone, setIsDone] = useState(false);
-  const [cardData, setCardData] = useState('');
+  const [txhash, _] = useState('');
+  const [__, setPrivateKey] = useState('');
+
+  const handleNfcReading = async () => {
+    if (typeof NDEFReader === 'undefined') {
+      console.log('NFC is not supported in this browser.');
+      return;
+    }
+
+    try {
+      console.log('NFC Reading Start');
+      const ndef = new NDEFReader();
+      await ndef.scan();
+
+      ndef.addEventListener('readingerror', () => {
+        console.log('Argh! Cannot read data from the NFC tag. Try another one?');
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ndef.addEventListener('reading', (event: any) => {
+        const { _, serialNumber } = event;
+        // console.log(`> Serial Number: ${serialNumber}`);
+        // console.log(`> Records: (${message.records.length})`);
+
+        // TODO: AA and ZK
+        const pkey = sha256Hash(serialNumber);
+        setPrivateKey('0x' + pkey);
+        const { address } = privateKeyToAccount(`0x${pkey}`);
+        const auth = { account: address };
+        localStorage.setItem('card', JSON.stringify(auth));
+      });
+    } catch (error) {
+      console.error('Error while scanning NFC:', error);
+    }
+  };
 
   useEffect(() => {
-    // if nfc event trigger
-    const cardData = '01:4f:d8:24';
-    if (cardData) {
-      localStorage.setItem('card', cardData);
-      setIsDone(true);
-    }
+    handleNfcReading();
   }, []);
 
   return (
@@ -30,7 +60,7 @@ const CardPage = () => {
         <Gnb />
         <Body>
           <Container>
-            {isDone ? (
+            {txhash ? (
               <>
                 <IconChecked width={80} height={80} />
                 <Divider bottom={24} />
@@ -51,7 +81,7 @@ const CardPage = () => {
           </Container>
           <ButtonFilled
             onClick={() => navigate('/my')}
-            isLoading={!isDone}
+            isLoading={!txhash}
             width={328}
             text="확인"
             primary={'large'}
