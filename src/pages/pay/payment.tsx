@@ -11,7 +11,7 @@ import { Gnb } from '~/components/gnb';
 import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
-import { AA_SCANNER_URL, MATIC_PRICE } from '~/constants';
+import { JIFFY_SCAN, MATIC_PRICE } from '~/constants';
 import { parseFloat, parseNumberWithComma, parseNumberWithUnit } from '~/utils/number';
 import { sha256Hash } from '~/utils/string';
 
@@ -89,8 +89,7 @@ export const PaymentPage = () => {
   }, []);
 
   const handleOpenHashWindow = () => {
-    // window.open(`${MUMBAI_SCANNER_URL}/tx/${txhash}`);
-    window.open(`${AA_SCANNER_URL}/op/${txhash}`);
+    window.open(`${JIFFY_SCAN}/userOpHash/${txhash}?network=mumbai`);
   };
 
   const maticRaw = Number(price) / MATIC_PRICE.WON;
