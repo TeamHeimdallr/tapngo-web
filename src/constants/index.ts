@@ -59,7 +59,7 @@ export const ALCHEMY_POLYGON_MUMBAI_API = 'https://polygon-mumbai.g.alchemy.com'
 
 export const MATIC_PRICE = {
   DALLAR: 0.6777,
-  WON: 874.09,
+  WON: 100000,
 };
 
 export const MUMBAI_SCANNER_URL = `https://mumbai.polygonscan.com/`;
