@@ -147,12 +147,12 @@ interface Props {
 }
 
 const Wrapper = styled.div<Props>(({ isDone, isError }) => [
-  tw`relative h-screen px-16 w-360 overflow-hidden`,
+  tw`relative h-full px-16 w-360 overflow-hidden`,
   isDone && !isError && tw`bg-green`,
   isDone && isError && tw`bg-red`,
 ]);
 const Body = tw.div`
-  pt-54 pb-16 flex flex-col h-screen
+  pt-54 pb-16 flex flex-col h-full
   justify-between
 `;
 const Container = tw.div`

@@ -13,7 +13,7 @@ const Ticketing = lazy(() => import('./pages/ticket/ticketing'));
 const Landing = lazy(() => import('./pages/landing'));
 const Provider = lazy(() => import('~/hocs/hoc-provider'));
 
-const RouteWrapper = tw.main`relative w-full h-full`;
+const RouteWrapper = tw.main`fixed overflow-hidden w-full h-full`;
 const App = () => {
   return (
     <BrowserRouter>
