@@ -25,6 +25,7 @@ const MyPage = () => {
   const [isNft, setIsNft] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
+  // TODO: CA 사용시 Internal Transfer 는 감지 X
   const { data: assetTransfersData, mutateAsync: postAssetTransfers } =
     useAlchemyPostAssetTransfers();
 
