@@ -6,7 +6,6 @@ import { Mint } from './pages/mint';
 import { Minting } from './pages/mint/minting';
 import { My } from './pages/my';
 import { Card } from './pages/my/card';
-import { History } from './pages/my/history';
 import { Pay } from './pages/pay';
 import { Payment } from './pages/pay/payment';
 import { Ticket } from './pages/ticket';
@@ -29,7 +28,6 @@ const App = () => {
           <Route path="/ticket/:id" element={<Ticketing />} />
           <Route path="/my" element={<My />} />
           <Route path="/my/card" element={<Card />} />
-          <Route path="/my/history" element={<History />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </RouteWrapper>
