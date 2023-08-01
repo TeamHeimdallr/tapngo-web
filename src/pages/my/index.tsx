@@ -1,11 +1,12 @@
 import copy from 'copy-to-clipboard';
 import { format } from 'date-fns';
-import { SyntheticEvent, useEffect, useState } from 'react';
+import { ethers } from 'ethers';
+import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw, { css, styled } from 'twin.macro';
 
 import { useAlchemyGetNfts } from '~/api/api-contract/alchemy/get-nfts';
-import { useAlchemyPostAssetTransfers } from '~/api/api-contract/alchemy/post-asset-transfers';
+import { usePolygonscanGetTransfer } from '~/api/api-contract/alchemy/get-transfer';
 import { useAlchemyPostGetTokenBalance } from '~/api/api-contract/alchemy/post-get-token-balances';
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
@@ -25,9 +26,13 @@ const MyPage = () => {
   const [isNft, setIsNft] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
-  // TODO: CA 사용시 Internal Transfer 는 감지 X
-  const { data: assetTransfersData, mutateAsync: postAssetTransfers } =
-    useAlchemyPostAssetTransfers();
+  const { data: assetTransfersDataRaw } = usePolygonscanGetTransfer({
+    address: cardData,
+  });
+
+  const assetTransfersData = useMemo(() => {
+    return assetTransfersDataRaw?.result;
+  }, [assetTransfersDataRaw]);
 
   const { data: nftsData } = useAlchemyGetNfts({ owner: cardData });
   const ownedNfts = nftsData?.ownedNfts;
@@ -86,7 +91,7 @@ const MyPage = () => {
 
   useEffect(() => {
     if (!cardData) return;
-    postAssetTransfers({ walletAddress: cardData as `0x${string}` });
+    // postAssetTransfers({ walletAddress: cardData as `0x${string}` });
     postGetTokenBalance({ walletAddress: cardData as `0x${string}` });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cardData]);
@@ -148,9 +153,11 @@ const MyPage = () => {
             <CardWrapper>
               {isHistory &&
                 (assetTransfersData && assetTransfersData.length > 0 ? (
-                  assetTransfersData.map(({ uniqueId, metadata, value, asset, from, hash }) => {
+                  assetTransfersData.map(({ timeStamp, value, from, hash }) => {
+                    const parsedValue = ethers.utils.formatEther(value);
+
                     const time = format(
-                      new Date(metadata.blockTimestamp || 0),
+                      new Date(Number(timeStamp) * 1000 || 0),
                       DATE_FORMATTER.yyyy_MM_dd_HH_mm_ss
                     );
                     const sent =
@@ -160,9 +167,9 @@ const MyPage = () => {
                     const handleOpenHashWindow = () => {
                       window.open(`${MUMBAI_SCANNER_URL}/tx/${hash}`);
                     };
-                    const formattedNumber = Number(parseFloat(Number(value || 0), 4));
+                    const formattedNumber = Number(parseFloat(Number(parsedValue || 0), 4));
                     const formattedNumberWon = Number(
-                      parseFloat(Number(value || 0) * MATIC_PRICE.WON, 4)
+                      parseFloat(Number(parsedValue || 0) * MATIC_PRICE.WON, 4)
                     );
 
                     const formattedWithUnit =
@@ -175,7 +182,7 @@ const MyPage = () => {
                         : parseNumberWithComma(formattedNumberWon);
 
                     return (
-                      <HistoryCardWrapper key={uniqueId}>
+                      <HistoryCardWrapper key={hash}>
                         <HistoryCardContainer>
                           <Row_1>
                             <Text type={TYPE.R_12} color={COLOR.GRAY5}>
@@ -190,7 +197,7 @@ const MyPage = () => {
                           </Row_2>
                           <Row_3>
                             <Text type={TYPE.R_12} color={COLOR.GRAY6}>
-                              {`${formattedWithUnit} ${asset}`}
+                              {`${formattedWithUnit} MATIC`}
                             </Text>
                           </Row_3>
                         </HistoryCardContainer>
@@ -200,7 +207,7 @@ const MyPage = () => {
                 ) : (
                   <HistoryEmptyWrapper>
                     <Text type={TYPE.R_12} color={COLOR.GRAY5}>
-                      거래내역이 없습니다.
+                      거래내역이 없습니다. {assetTransfersDataRaw?.toString()}
                     </Text>
                   </HistoryEmptyWrapper>
                 ))}

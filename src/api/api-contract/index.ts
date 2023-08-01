@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ALCHEMY_POLYGON_MUMBAI_API } from '~/constants';
+import { ALCHEMY_POLYGON_MUMBAI_API, POLYGONSCAN_MUMBAI_API } from '~/constants';
 
 export const alchemyApi = axios.create({
   baseURL: ALCHEMY_POLYGON_MUMBAI_API,
@@ -8,4 +8,12 @@ export const alchemyApi = axios.create({
     'Content-type': 'application/json',
   },
   withCredentials: true,
+});
+
+export const polygonscanApi = axios.create({
+  baseURL: POLYGONSCAN_MUMBAI_API,
+  headers: {
+    'Content-type': 'application/json',
+  },
+  withCredentials: false,
 });
