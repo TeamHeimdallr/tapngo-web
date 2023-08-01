@@ -113,8 +113,7 @@ const MyPage = () => {
                     new Date(metadata.blockTimestamp || 0),
                     DATE_FORMATTER.yyyy_MM_dd_HH_mm_ss
                   );
-                  // const sent = from === walletAddress;
-                  const sent = true;
+                  const sent = from === cardData;
                   const unit = sent ? '-' : '+';
 
                   const handleOpenHashWindow = () => {

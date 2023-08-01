@@ -32,16 +32,16 @@ export const BREAKPOINT = {
 };
 
 // CHAIN ID
-type Chain = 'ETH' | 'GOERLI';
+type Chain = 'POLYGON' | 'POLYGON_MUMBAI';
 export const CHAIN_ID: Record<Chain, number> = {
-  ETH: 1,
-  GOERLI: 5,
+  POLYGON: 127,
+  POLYGON_MUMBAI: 80001,
 };
-export const DEFAULT_CHAIN_ID = IS_MAINNET ? CHAIN_ID.ETH : CHAIN_ID.GOERLI;
+export const DEFAULT_CHAIN_ID = IS_MAINNET ? CHAIN_ID.POLYGON : CHAIN_ID.POLYGON_MUMBAI;
 
-type Contract = 'CONTRACT_NAME';
+type Contract = 'POAP';
 export const CONTRACT_ADDRESS: Record<Contract, `0x${string}`> = {
-  CONTRACT_NAME: IS_MAINNET ? '0x' : '0x',
+  POAP: IS_MAINNET ? '0x' : '0x181a35EEB40Ad002B8a331918E1d0efEf569e8c8',
 };
 
 export const WALLETCONNECT_PROJECT_ID = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;

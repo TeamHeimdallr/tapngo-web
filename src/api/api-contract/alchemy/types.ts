@@ -177,3 +177,29 @@ export interface GetOwnersForTokenRequest {
 export interface GetOwnersForTokenResponse {
   owners: `0x${string}`[];
 }
+
+/**
+ * Get contract metadata
+ */
+
+/**
+ * request
+ */
+export interface GetContractMetadataRequest {
+  contractAddress: `0x${string}`;
+}
+
+/**
+ * response
+ */
+export interface GetContractMetadataResponse {
+  address: `0x${string}`;
+  contractMetadata: {
+    name: string;
+    symbol: string;
+    tokenType: string;
+    openSea: {
+      lastIngestedAt: string;
+    };
+  };
+}
