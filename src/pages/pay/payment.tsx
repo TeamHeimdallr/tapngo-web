@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import tw from 'twin.macro';
-import { parseEther, parseGwei } from 'viem';
-import { privateKeyToAccount } from 'viem/accounts';
-import { polygonMumbai } from 'viem/chains';
 
+import transfer from '~/aa/transfer';
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
@@ -14,7 +11,6 @@ import { Gnb } from '~/components/gnb';
 import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
-import { publicClient, walletClient } from '~/configs/setup-contract';
 import { MATIC_PRICE, MUMBAI_SCANNER_URL } from '~/constants';
 import { parseFloat, parseNumberWithComma, parseNumberWithUnit } from '~/utils/number';
 import { sha256Hash } from '~/utils/string';
@@ -62,25 +58,11 @@ export const PaymentPage = () => {
     value: string;
   }
   const transferToken = async ({ from, to, value }: TransferToken) => {
-    const account = privateKeyToAccount(from);
-
-    const sentTx = await walletClient.sendTransaction({
-      account,
-      to,
-      value: parseEther(value),
-      chain: polygonMumbai,
-      maxFeePerGas: parseGwei('2.5'),
-      maxPriorityFeePerGas: parseGwei('1.5'),
-    });
-
     setLoading(true);
-    const transaction = await publicClient.waitForTransactionReceipt({
-      hash: sentTx,
-    });
-    console.log('transaction', transaction);
+    const txHash = await transfer(from, to, value);
     setLoading(false);
 
-    return transaction.transactionHash;
+    return txHash ?? '';
   };
 
   const getTruncatedTxhash = () => {

@@ -23,6 +23,7 @@
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "dotenv-cli": "^7.2.1",
+    "ethers": "^5.7.2",
     "immer": "^10.0.2",
     "lodash-es": "^4.17.21",
     "lottie-web": "^5.12.2",
@@ -34,6 +35,7 @@
     "react-router-dom": "^6.14.2",
     "tinycolor2": "^1.6.0",
     "usehooks-ts": "^2.9.1",
+    "userop": "^0.3.0",
     "viem": "^1.4.2",
     "zustand": "^4.3.9"
   },
