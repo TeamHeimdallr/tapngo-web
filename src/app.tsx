@@ -10,6 +10,7 @@ import { History } from './pages/my/history';
 import { Pay } from './pages/pay';
 import { Payment } from './pages/pay/payment';
 import { Ticket } from './pages/ticket';
+import { Ticketing } from './pages/ticket/ticketing';
 
 const Landing = loadable(() => import('./pages/landing'));
 
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/mint" element={<Mint />} />
           <Route path="/mint/:id" element={<Minting />} />
           <Route path="/ticket" element={<Ticket />} />
+          <Route path="/ticket/:id" element={<Ticketing />} />
           <Route path="/my" element={<My />} />
           <Route path="/my/card" element={<Card />} />
           <Route path="/my/history" element={<History />} />

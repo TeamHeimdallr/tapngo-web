@@ -10,6 +10,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   height?: number;
   isLoading?: boolean;
   disabled?: boolean;
+  bg?: string;
   primary: 'large' | 'medium';
 }
 export const ButtonFilled = ({ text, isLoading, disabled, primary, ...rest }: Props) => {
@@ -45,9 +46,10 @@ interface LoadingProps {
   disabled?: boolean;
   width?: number;
   height?: number;
+  bg?: string;
   primary: 'large' | 'medium';
 }
-const Wrapper = styled.button<LoadingProps>(({ primary, isLoading, width, height = 48 }) => [
+const Wrapper = styled.button<LoadingProps>(({ primary, isLoading, width, height = 48, bg }) => [
   tw`
     flex-center relative
     rounded-8 bg-green clickable
@@ -61,6 +63,13 @@ const Wrapper = styled.button<LoadingProps>(({ primary, isLoading, width, height
   primary === 'large' && tw`py-16 px-24 h-56`,
   primary === 'medium' && tw`py-9 px-20 h-38`,
   isLoading && tw`text-transparent non-clickable bg-gray2 hover:(bg-gray2)`,
+  bg &&
+    css`
+      background-color: ${bg};
+      &:hover {
+        background-color: ${bg};
+      }
+    `,
 ]);
 
 const TextWrapper = styled.div<LoadingProps>(({ isLoading, disabled }) => [

@@ -26,7 +26,7 @@ export const Mint = () => {
             <MintingWrapper>
               <Image src="poap.png" alt="" />
               <Divider bottom={16} />
-              <Text type={TYPE.SB_16}>해커톤 참가 요청</Text>
+              <Text type={TYPE.SB_16}>SWF 2023 해커톤 참가</Text>
               <Divider bottom={4} />
               <Text type={TYPE.R_12} color={COLOR.GRAY5}>
                 2023년 7월 31일
