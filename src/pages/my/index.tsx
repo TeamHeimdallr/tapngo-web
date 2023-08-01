@@ -28,7 +28,7 @@ const MyPage = () => {
   const { data: assetTransfersData, mutateAsync: postAssetTransfers } =
     useAlchemyPostAssetTransfers();
 
-  const { data: nftsData } = useAlchemyGetNfts({ owner: cardData }, { enabled: false });
+  const { data: nftsData } = useAlchemyGetNfts({ owner: cardData }, { enabled: true });
   const ownedNfts = nftsData?.ownedNfts;
 
   const { data: maticData, mutateAsync: postGetTokenBalance } = useAlchemyPostGetTokenBalance();
@@ -251,16 +251,16 @@ const AddCardContainer = tw.div`
   h-122 w-full bg-gray1 gap-8
   flex flex-col flex-center
   clickable rounded-8
-  
+
 `;
 
 const HistoryWrapper = tw.div`
-  flex flex-col 
+  flex flex-col
 `;
 
 const AssetWrapper = tw.div`
   w-full h-122 p-24
-  flex flex-col 
+  flex flex-col
   bg-green rounded-8
 `;
 const AssetContainer = tw.div`
@@ -289,10 +289,10 @@ const CardWrapper = styled.div(() => [tw`flex flex-col gap-12 `]);
 const HistoryCardWrapper = styled.div(() => [tw`px-20 py-16 bg-gray1 rounded-8`]);
 
 const HistoryCardContainer = tw.div`
-  flex flex-col 
+  flex flex-col
 `;
 const Row_1 = tw.div`
-  
+
 `;
 const Row_2 = tw.div`
   flex justify-between
@@ -312,7 +312,7 @@ const CopyAddressWrapper = styled.div<Props>(({ isCopied }) => [
   tw`
   flex gap-4 pl-8 pr-6
   items-center rounded-10
-  w-100 clickable 
+  w-100 clickable
 `,
   isCopied && tw`w-58`,
 ]);

@@ -20,14 +20,13 @@ const TicketingPage = () => {
   const [isDone, setDone] = useState<boolean>(false);
   const [isError, setError] = useState<boolean>(false);
 
-  const [privateKey, setPrivateKey] = useState('');
   const [address, setAddress] = useState('');
 
   const { data: nftOwner } = useAlchemyGetOwnersForCollection({
     contractAddress: CONTRACT_ADDRESS.POAP,
   });
 
-  const isOwner = nftOwner?.owners
+  const isOwner = nftOwner?.ownerAddresses
     ?.map(owner => owner.toLowerCase())
     ?.includes(address.toLowerCase() as `0x${string}`);
 
@@ -54,9 +53,7 @@ const TicketingPage = () => {
 
         // TODO: AA and ZK
         const pkey = sha256Hash(serialNumber);
-        const account = privateKeyToAccount(privateKey as `0x${string}`);
-
-        setPrivateKey('0x' + pkey);
+        const account = privateKeyToAccount(`0x${pkey}` as `0x${string}`);
         setAddress(account.address);
       });
     } catch (error) {
