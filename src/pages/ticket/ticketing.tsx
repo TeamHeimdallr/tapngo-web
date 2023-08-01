@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
-import { privateKeyToAccount } from 'viem/accounts';
 
+import getAddress from '~/aa/getAddress';
 import { useAlchemyGetOwnersForCollection } from '~/api/api-contract/alchemy/get-owners-for-collection';
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
@@ -46,15 +46,15 @@ const TicketingPage = () => {
       });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ndef.addEventListener('reading', (event: any) => {
+      ndef.addEventListener('reading', async (event: any) => {
         const { _, serialNumber } = event;
         // console.log(`> Serial Number: ${serialNumber}`);
         // console.log(`> Records: (${message.records.length})`);
 
         // TODO: AA and ZK
         const pkey = sha256Hash(serialNumber);
-        const account = privateKeyToAccount(`0x${pkey}` as `0x${string}`);
-        setAddress(account.address);
+        const address = await getAddress(`0x${pkey}` as `0x${string}`);
+        setAddress(address);
       });
     } catch (error) {
       console.error('Error while scanning NFC:', error);

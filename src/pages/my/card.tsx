@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
-import { privateKeyToAccount } from 'viem/accounts';
 
+import getAddress from '~/aa/getAddress';
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
 import { Divider } from '~/components/divider';
@@ -33,7 +33,7 @@ const CardPage = () => {
       });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ndef.addEventListener('reading', (event: any) => {
+      ndef.addEventListener('reading', async (event: any) => {
         const { _, serialNumber } = event;
         // console.log(`> Serial Number: ${serialNumber}`);
         // console.log(`> Records: (${message.records.length})`);
@@ -41,7 +41,7 @@ const CardPage = () => {
         // TODO: AA and ZK
         const pkey = sha256Hash(serialNumber);
         if (pkey) {
-          const { address } = privateKeyToAccount(`0x${pkey}`);
+          const address = await getAddress(`0x${pkey}`);
           const auth = { account: address };
           setAddress(address.slice(0, 5) + '...' + address.slice(-4));
           localStorage.setItem('card', JSON.stringify(auth));

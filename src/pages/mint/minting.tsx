@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
-import { privateKeyToAccount } from 'viem/accounts';
 
-import { NFT_ABI } from '~/abi/nft';
+import createToken from '~/aa/createToken';
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
@@ -12,7 +11,7 @@ import { Gnb } from '~/components/gnb';
 import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
-import { publicClient, walletClient } from '~/configs/setup-contract';
+import { CONTRACT_ADDRESS, JIFFY_SCAN } from '~/constants';
 import { sha256Hash } from '~/utils/string';
 
 const MintingPage = () => {
@@ -20,6 +19,7 @@ const MintingPage = () => {
   const [isDone, setIsDone] = useState<boolean>(false);
   const [privateKey, setPrivateKey] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [txhash, setTxhash] = useState('');
 
   const handleNfcReading = async () => {
     if (typeof NDEFReader === 'undefined') {
@@ -50,25 +50,29 @@ const MintingPage = () => {
       console.error('Error while scanning NFC:', error);
     }
   };
+  const handleOpenHashWindow = () => {
+    window.open(`${JIFFY_SCAN}/userOpHash/${txhash}?network=mumbai`);
+  };
 
   const mint = async () => {
-    const account = privateKeyToAccount(privateKey as `0x${string}`);
-
-    const { request } = await publicClient.simulateContract({
-      account,
-      address: '0x181a35eeb40ad002b8a331918e1d0efef569e8c8',
-      abi: NFT_ABI,
-      functionName: 'createToken',
-    });
-
-    const writeTx = await walletClient.writeContract(request);
-
     setLoading(true);
-    await publicClient.waitForTransactionReceipt({
-      hash: writeTx,
-    });
+    const txHash = await createToken(privateKey, CONTRACT_ADDRESS.POAP);
     setLoading(false);
     setIsDone(true);
+
+    if (txHash) setTxhash(txHash);
+
+    return txHash ?? '';
+  };
+
+  const getTruncatedTxhash = () => {
+    let truncatedHash: string = '';
+    if (txhash) {
+      const frontPart = txhash.slice(0, 7);
+      const backPart = txhash.slice(-4);
+      truncatedHash = `${frontPart}...${backPart}`;
+    }
+    return truncatedHash;
   };
 
   useEffect(() => {
@@ -105,6 +109,23 @@ const MintingPage = () => {
                 </Text>
               </TextContainer>
             </MintingWrapper>
+            {txhash && (
+              <>
+                <Divider bottom={24} />
+                <TxhashWrapper onClick={handleOpenHashWindow}>
+                  <TxhashContainer>
+                    <Text type={TYPE.R_12} color={COLOR.GRAY5}>
+                      AA Scan
+                    </Text>
+                    <Txhash>
+                      <Text type={TYPE.R_12} color={COLOR.GRAY7}>
+                        {getTruncatedTxhash()}
+                      </Text>
+                    </Txhash>
+                  </TxhashContainer>
+                </TxhashWrapper>
+              </>
+            )}
           </Container>
           <ButtonFilled
             isLoading={!isDone}
@@ -144,4 +165,15 @@ const TextContainer = tw.div`
 `;
 const Image = tw.img`
   w-80 h-80
+`;
+const TxhashWrapper = tw.div`
+  w-200 py-6 px-16 flex flex-center
+  rounded-8 bg-gray1
+  clickable
+`;
+const TxhashContainer = tw.div`
+  flex gap-24
+`;
+const Txhash = tw.div`
+  underline
 `;
