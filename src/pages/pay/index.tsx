@@ -22,10 +22,10 @@ const PayPage = () => {
     const regex = /^\d+$/;
     if (value !== '' && !regex.test(value)) {
       setStatus('error');
-      setValue(value);
       return;
     } else if (value === '') setStatus('normal');
-    setValue(parseNumberWithComma(+value));
+    if (value !== '') setValue(parseNumberWithComma(+value));
+    else if (value === '') setValue(value);
   };
 
   const handleClick = () => {
