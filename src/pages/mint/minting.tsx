@@ -15,7 +15,7 @@ import { Text } from '~/components/text';
 import { publicClient, walletClient } from '~/configs/setup-contract';
 import { sha256Hash } from '~/utils/string';
 
-export const Minting = () => {
+const MintingPage = () => {
   const navigate = useNavigate();
   const [isDone, setIsDone] = useState<boolean>(false);
   const [privateKey, setPrivateKey] = useState('');
@@ -108,6 +108,8 @@ export const Minting = () => {
     </Layout>
   );
 };
+
+export default MintingPage;
 
 const Wrapper = tw.div`
   relative

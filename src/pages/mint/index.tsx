@@ -9,7 +9,7 @@ import { Gnb } from '~/components/gnb';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 
-export const Mint = () => {
+const MintPage = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -39,6 +39,8 @@ export const Mint = () => {
     </Layout>
   );
 };
+export default MintPage;
+
 const Wrapper = tw.div`
   relative
   w-360 h-screen px-16

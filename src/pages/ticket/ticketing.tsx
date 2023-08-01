@@ -11,7 +11,7 @@ import { IconCancel, IconCheck, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 
-export const Ticketing = () => {
+const TicketingPage = () => {
   const navigate = useNavigate();
   const [isDone] = useState<boolean>(true);
   const [isError] = useState<boolean>(true);
@@ -71,16 +71,15 @@ export const Ticketing = () => {
   );
 };
 
+export default TicketingPage;
+
 interface Props {
   isDone?: boolean;
   isError?: boolean;
 }
 
 const Wrapper = styled.div<Props>(({ isDone, isError }) => [
-  tw`
-    relative 
-    w-360 h-screen px-16 
-  `,
+  tw`relative h-screen px-16 w-360`,
   isDone && !isError && tw`bg-green`,
   isDone && isError && tw`bg-red`,
 ]);

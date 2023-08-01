@@ -11,7 +11,7 @@ import { Text } from '~/components/text';
 import { useDebounce } from '~/hooks/data/use-debounce';
 import { parseNumberWithComma } from '~/utils/number';
 
-export const Pay = () => {
+const PayPage = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState<string>('');
   const [status, setStatus] = useState<string>('');
@@ -58,6 +58,9 @@ export const Pay = () => {
     </Layout>
   );
 };
+
+export default PayPage;
+
 const Wrapper = tw.div`
   relative 
   w-360 h-screen px-16 

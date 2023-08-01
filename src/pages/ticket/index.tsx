@@ -9,7 +9,7 @@ import { Gnb } from '~/components/gnb';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 
-export const Ticket = () => {
+const TicketPage = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -39,6 +39,9 @@ export const Ticket = () => {
     </Layout>
   );
 };
+
+export default TicketPage;
+
 const Wrapper = tw.div`
   relative 
   w-360 h-screen px-16 

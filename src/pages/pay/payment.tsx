@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import tw from 'twin.macro';
@@ -161,6 +162,8 @@ export const Payment = () => {
     </Layout>
   );
 };
+
+export default PaymentPage;
 
 const Wrapper = tw.div`
   relative

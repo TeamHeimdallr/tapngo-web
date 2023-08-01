@@ -10,7 +10,7 @@ import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 import { parseNumberWithComma } from '~/utils/number';
 
-export const My = () => {
+const MyPage = () => {
   const navigate = useNavigate();
   const [cardData, setCardData] = useState('');
   const [isHistory, setIsHistory] = useState(true);
@@ -138,6 +138,8 @@ export const My = () => {
   );
 };
 
+export default MyPage;
+
 const Wrapper = tw.div`
   w-360 px-16 pt-60
   flex flex-col gap-40
@@ -172,32 +174,17 @@ interface Props {
   clicked?: boolean;
 }
 const MenuContainer = styled.div<Props>(() => [
-  tw`
-    w-160 flex flex-col flex-center gap-12
-    clickable
-  `,
+  tw`flex flex-col gap-12  w-160 flex-center clickable`,
 ]);
 
 const Border = styled.div<Props>(({ clicked }) => [
-  tw`
-    border-1 border-solid border-gray7
-    w-full
-  `,
+  tw`w-full border-solid  border-1 border-gray7`,
   !clicked && tw`opacity-0`,
 ]);
 
-const CardWrapper = styled.div(() => [
-  tw`
-    flex flex-col gap-12
-  `,
-]);
+const CardWrapper = styled.div(() => [tw`flex flex-col gap-12 `]);
 
-const HistoryCardWrapper = styled.div(() => [
-  tw`
-    bg-gray1 py-16 px-20
-    rounded-8
-  `,
-]);
+const HistoryCardWrapper = styled.div(() => [tw`px-20 py-16  bg-gray1 rounded-8`]);
 
 const HistoryCardContainer = tw.div`
   flex flex-col 
