@@ -12,7 +12,7 @@ import { IconLogout, IconPlus } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 import { MATIC_PRICE, MUMBAI_SCANNER_URL } from '~/constants';
-import { parseNumberWithComma } from '~/utils/number';
+import { parseFloat, parseNumberWithComma, parseNumberWithUnit } from '~/utils/number';
 import { truncateAddress } from '~/utils/string';
 import { DATE_FORMATTER } from '~/utils/time';
 
@@ -25,10 +25,7 @@ const MyPage = () => {
   const { data: assetTransfersData, mutateAsync: postAssetTransfers } =
     useAlchemyPostAssetTransfers();
 
-  const { data: nftsData } = useAlchemyGetNfts(
-    { owner: '0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258' },
-    { enabled: false }
-  );
+  const { data: nftsData } = useAlchemyGetNfts({ owner: cardData }, { enabled: false });
   const ownedNfts = nftsData?.ownedNfts;
 
   const handleClickAdd = () => {
@@ -63,9 +60,10 @@ const MyPage = () => {
   }, []);
 
   useEffect(() => {
-    postAssetTransfers({ walletAddress: '0x' });
+    if (!cardData) return;
+    postAssetTransfers({ walletAddress: cardData as `0x${string}` });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [cardData]);
 
   return (
     <Layout>
@@ -119,6 +117,19 @@ const MyPage = () => {
                     const handleOpenHashWindow = () => {
                       window.open(`${MUMBAI_SCANNER_URL}/tx/${hash}`);
                     };
+                    const formattedNumber = Number(parseFloat(Number(value || 0), 4));
+                    const formattedNumberWon = Number(
+                      parseFloat(Number(value || 0) * MATIC_PRICE.WON, 4)
+                    );
+
+                    const formattedWithUnit =
+                      formattedNumber > 100000
+                        ? parseNumberWithUnit(formattedNumber)
+                        : parseNumberWithComma(formattedNumber);
+                    const formattedWonWithUnit =
+                      formattedNumberWon > 100000
+                        ? parseNumberWithUnit(formattedNumberWon)
+                        : parseNumberWithComma(formattedNumberWon);
 
                     return (
                       <HistoryCardWrapper key={uniqueId}>
@@ -132,15 +143,11 @@ const MyPage = () => {
                             <Text type={TYPE.R_14} onClick={handleOpenHashWindow}>
                               {truncateAddress(hash as `0x${string}`)}
                             </Text>
-                            <Text type={TYPE.SB_14}>
-                              {`${unit} ${parseNumberWithComma(
-                                MATIC_PRICE.WON * Number(value)
-                              )} 원`}
-                            </Text>
+                            <Text type={TYPE.SB_14}>{`${unit} ${formattedWonWithUnit} 원`}</Text>
                           </Row_2>
                           <Row_3>
                             <Text type={TYPE.R_12} color={COLOR.GRAY6}>
-                              {`${value} ${asset}`}
+                              {`${formattedWithUnit} ${asset}`}
                             </Text>
                           </Row_3>
                         </HistoryCardContainer>
