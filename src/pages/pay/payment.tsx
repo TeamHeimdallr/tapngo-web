@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import tw from 'twin.macro';
-import { parseEther, parseGwei } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-import { polygonMumbai } from "viem/chains";
+import { parseEther, parseGwei } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { polygonMumbai } from 'viem/chains';
 
 import { COLOR } from '~/assets/colors';
-import { publicClient, walletClient } from "~/configs/setup-contract";
 import { TYPE } from '~/assets/fonts';
 import { ButtonFilled } from '~/components/buttons';
 import { Divider } from '~/components/divider';
@@ -14,6 +13,7 @@ import { Gnb } from '~/components/gnb';
 import { IconChecked, IconPayed } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
+import { publicClient, walletClient } from '~/configs/setup-contract';
 import { parseNumberWithComma } from '~/utils/number';
 import { sha256Hash } from '~/utils/string';
 
@@ -21,27 +21,26 @@ export const Payment = () => {
   const navigate = useNavigate();
   const { price } = useParams();
   const [isDone, setIsDone] = useState<boolean>(false);
-  const [privateKey, setPrivateKey] = useState("");
+  const [privateKey, setPrivateKey] = useState('');
 
   const handleNfcReading = async () => {
-    if (typeof NDEFReader === "undefined") {
-      console.log("NFC is not supported in this browser.");
+    if (typeof NDEFReader === 'undefined') {
+      console.log('NFC is not supported in this browser.');
       return;
     }
 
     try {
-      console.log("NFC Reading Start");
+      console.log('NFC Reading Start');
       const ndef = new NDEFReader();
       await ndef.scan();
 
-      ndef.addEventListener("readingerror", () => {
-        console.log(
-          "Argh! Cannot read data from the NFC tag. Try another one?"
-        );
+      ndef.addEventListener('readingerror', () => {
+        console.log('Argh! Cannot read data from the NFC tag. Try another one?');
       });
 
-      ndef.addEventListener("reading", (event: any) => {
-        const { message, serialNumber } = event;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ndef.addEventListener('reading', (event: any) => {
+        const { _, serialNumber } = event;
         // console.log(`> Serial Number: ${serialNumber}`);
         // console.log(`> Records: (${message.records.length})`);
 
@@ -50,7 +49,7 @@ export const Payment = () => {
         setPrivateKey('0x' + pkey);
       });
     } catch (error) {
-      console.error("Error while scanning NFC:", error);
+      console.error('Error while scanning NFC:', error);
     }
   };
 
@@ -67,14 +66,14 @@ export const Payment = () => {
       to,
       value: parseEther(value),
       chain: polygonMumbai,
-      maxFeePerGas: parseGwei("2.5"),
-      maxPriorityFeePerGas: parseGwei("1.5"),
+      maxFeePerGas: parseGwei('2.5'),
+      maxPriorityFeePerGas: parseGwei('1.5'),
     });
 
     const transaction = await publicClient.waitForTransactionReceipt({
       hash: sentTx,
     });
-    console.log("transaction", transaction);
+    console.log('transaction', transaction);
 
     return transaction.transactionHash;
   };
@@ -82,16 +81,15 @@ export const Payment = () => {
   useEffect(() => {
     transferToken({
       from: privateKey as `0x${string}`,
-      to: "0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258",
-      value: "0.0001",
-    }).then(() =>
-      setIsDone(true)
-    );
+      to: '0x48DBa2D1b6C89Bf8234C2B63554369aDC7Ae3258',
+      value: (Math.floor((10000 * Number(price)) / 2340000) / 10000).toString(),
+    }).then(() => setIsDone(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [privateKey]);
 
   useEffect(() => {
     handleNfcReading();
-  },[])
+  }, []);
 
   return (
     <Layout>
@@ -115,7 +113,7 @@ export const Payment = () => {
             </div>
             <Divider bottom={4} />
             <Text type={TYPE.R_14} color={COLOR.GRAY6}>
-              0.01 ETH
+              ${Math.floor((10000 * Number(price)) / 2340000) / 10000} ETH
             </Text>
           </Container>
           <ButtonFilled
