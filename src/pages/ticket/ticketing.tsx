@@ -130,7 +130,7 @@ const TicketingPage = () => {
             width={328}
             text="확인"
             primary={'large'}
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/admin')}
             bg={COLOR.WHITE}
           />
         </Body>
@@ -147,7 +147,7 @@ interface Props {
 }
 
 const Wrapper = styled.div<Props>(({ isDone, isError }) => [
-  tw`relative h-full px-16 w-360 overflow-hidden`,
+  tw`relative h-full px-16 w-360 overflow-x-hidden`,
   isDone && !isError && tw`bg-green`,
   isDone && isError && tw`bg-red`,
 ]);

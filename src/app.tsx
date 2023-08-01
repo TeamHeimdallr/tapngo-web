@@ -13,7 +13,7 @@ const Ticketing = lazy(() => import('./pages/ticket/ticketing'));
 const Landing = lazy(() => import('./pages/landing'));
 const Provider = lazy(() => import('~/hocs/hoc-provider'));
 
-const RouteWrapper = tw.main`fixed overflow-hidden w-full h-full`;
+const RouteWrapper = tw.main`relative w-full h-full`;
 const App = () => {
   return (
     <BrowserRouter>
@@ -21,15 +21,15 @@ const App = () => {
         <Provider>
           <RouteWrapper>
             <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/pay" element={<Pay />} />
-              <Route path="/pay/:price" element={<Payment />} />
-              <Route path="/mint" element={<Mint />} />
-              <Route path="/mint/:id" element={<Minting />} />
-              <Route path="/ticket" element={<Ticket />} />
-              <Route path="/ticket/:id" element={<Ticketing />} />
-              <Route path="/my" element={<My />} />
-              <Route path="/my/card" element={<Card />} />
+              <Route path="/admin" element={<Landing />} />
+              <Route path="/admin/pay" element={<Pay />} />
+              <Route path="/admin/pay/:price" element={<Payment />} />
+              <Route path="/admin/mint" element={<Mint />} />
+              <Route path="/admin/mint/:id" element={<Minting />} />
+              <Route path="/admin/ticket" element={<Ticket />} />
+              <Route path="/admin/ticket/:id" element={<Ticketing />} />
+              <Route path="/" element={<My />} />
+              <Route path="/card" element={<Card />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </RouteWrapper>

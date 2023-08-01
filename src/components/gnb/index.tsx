@@ -10,7 +10,7 @@ interface Props {
 export const Gnb = ({ landing }: Props) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    if (landing) navigate('/');
+    if (landing) navigate('/admin');
     else navigate(-1);
   };
   return (

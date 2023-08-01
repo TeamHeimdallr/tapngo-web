@@ -84,7 +84,7 @@ const CardPage = () => {
             )}
           </Container>
           <ButtonFilled
-            onClick={() => navigate('/my')}
+            onClick={() => navigate('/')}
             isLoading={!isLogin}
             width={328}
             text="확인"
@@ -101,7 +101,7 @@ export default CardPage;
 const Wrapper = tw.div`
   relative
   w-360 h-full px-16
-  overflow-hidden
+  overflow-x-hidden
 `;
 const Body = tw.div`
   pt-54 pb-16 flex flex-col h-full

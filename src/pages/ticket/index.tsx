@@ -13,7 +13,7 @@ const TicketPage = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/ticket/1`);
+    navigate(`/admin/ticket/1`);
   };
 
   return (
@@ -45,7 +45,7 @@ export default TicketPage;
 const Wrapper = tw.div`
   relative 
   w-360 h-full px-16 
-  overflow-hidden
+  overflow-x-hidden
 `;
 const Body = tw.div`
   pt-54 pb-16 flex flex-col h-full

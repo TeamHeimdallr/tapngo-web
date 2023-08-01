@@ -10,7 +10,7 @@ import { useAlchemyPostGetTokenBalance } from '~/api/api-contract/alchemy/post-g
 import { COLOR } from '~/assets/colors';
 import { TYPE } from '~/assets/fonts';
 import { Divider } from '~/components/divider';
-import { IconCopy, IconLogout, IconPlus } from '~/components/icons';
+import { IconCopy, IconLogout, IconPlus, IconSwap } from '~/components/icons';
 import { Layout } from '~/components/layout';
 import { Text } from '~/components/text';
 import { MATIC_PRICE, MUMBAI_SCANNER_URL } from '~/constants';
@@ -40,7 +40,7 @@ const MyPage = () => {
       : parseNumberWithComma(formattedMaticWon);
 
   const handleClickAdd = () => {
-    navigate('/my/card');
+    navigate('/card');
   };
 
   const handleClick = (e: SyntheticEvent<HTMLDivElement>) => {
@@ -93,6 +93,7 @@ const MyPage = () => {
             <TitleContainer>
               <Text type={TYPE.SB_24}>내 지갑</Text>
               <IconContainer onClick={handleLogout}>
+                <IconSwap onClick={() => navigate('/admin')} />
                 <IconLogout />
               </IconContainer>
             </TitleContainer>
@@ -228,7 +229,12 @@ const MyPage = () => {
           </HistoryWrapper>
         ) : (
           <>
-            <Text type={TYPE.SB_24}>내 지갑</Text>
+            <TitleContainer_>
+              <Text type={TYPE.SB_24}>내 지갑</Text>
+              <IconContainer_ onClick={() => navigate('/admin')}>
+                <IconSwap />
+              </IconContainer_>
+            </TitleContainer_>
             <AddCardContainer onClick={handleClickAdd}>
               <IconPlus />
               <Text type={TYPE.R_14}> 카드 등록하기</Text>
@@ -242,6 +248,12 @@ const MyPage = () => {
 
 export default MyPage;
 
+const IconContainer_ = tw.div`
+  clickable
+`;
+const TitleContainer_ = tw.div`
+  flex justify-between
+`;
 const Wrapper = tw.div`
   w-360 px-16 pt-60 pb-72
   flex flex-col gap-40
@@ -338,7 +350,7 @@ const TitleContainer = tw.div`
   flex justify-between
 `;
 const IconContainer = tw.div`
-  clickable
+  clickable flex gap-8
 `;
 
 const HistoryEmptyWrapper = tw.div`
