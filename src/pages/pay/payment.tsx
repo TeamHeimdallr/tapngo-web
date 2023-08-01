@@ -62,7 +62,6 @@ export const PaymentPage = () => {
     value: string;
   }
   const transferToken = async ({ from, to, value }: TransferToken) => {
-    setLoading(true);
     const account = privateKeyToAccount(from);
 
     const sentTx = await walletClient.sendTransaction({
@@ -74,6 +73,7 @@ export const PaymentPage = () => {
       maxPriorityFeePerGas: parseGwei('1.5'),
     });
 
+    setLoading(true);
     const transaction = await publicClient.waitForTransactionReceipt({
       hash: sentTx,
     });
